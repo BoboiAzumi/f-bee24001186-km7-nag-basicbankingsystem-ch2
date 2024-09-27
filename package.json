@@ -1,0 +1,15 @@
+{
+  "name": "challange-2",
+  "version": "1.0.0",
+  "main": "bank_account.js",
+  "scripts": {
+    "bank_system": "node bank_system.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "readline-sync": "^1.4.10"
+  }
+}
