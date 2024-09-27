@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "bank_account.js",
   "scripts": {
-    "bank_system": "node banking_system.js"
+    "banking_system": "node banking_system.js"
   },
   "keywords": [],
   "author": "",
