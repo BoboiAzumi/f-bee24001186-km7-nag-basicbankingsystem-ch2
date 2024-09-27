@@ -1,7 +1,9 @@
-# Flowchart
+# Basic Banking System
+
+## Flowchart
 <img src="https://raw.githubusercontent.com/BoboiAzumi/f-bee24001186-km7-nag-basicbankingsystem-ch2/refs/heads/main/flowchart/flowchart-webp.webp">
 
-# Cara menjalankan
+## Cara menjalankan
 1 . install library external
 ```
 npm install
@@ -16,7 +18,7 @@ atau
 node banking_system.js
 ```
 
-# Tentang
+## Tentang
 <pre>
 Nama    : Naufal Azmi Ginting
 
