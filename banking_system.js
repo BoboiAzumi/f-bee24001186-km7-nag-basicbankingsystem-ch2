@@ -3,8 +3,9 @@ const BankAccount = require("./bank_account.js")
 const Human = require("./human.js")
 
 // Helper polymorphism
-const Banking = Base => class extends Base{
-    constructor(){
+const Banking = HumanClass => class extends HumanClass{
+    constructor(nama){
+        super(nama)
         this.bankAccount = new BankAccount()
     }
 }
@@ -12,6 +13,7 @@ const Banking = Base => class extends Base{
 // Implementasi inheritance dan polymorphism
 class UserBank extends Banking(Human){
     constructor(nama, rekening, pin){
+        super(nama)
         this.nama = nama
         this.rekening = rekening
         this.pin = pin
@@ -85,7 +87,20 @@ class BankingSystem{
             }
 
             const account = this.account.find((v) => v.getRekening() == auth.rekening)
-            await account.getbankAccount().deposit(ammount)
+            const depositTransaction = new Promise((resolve, reject) => {
+                // Implementasi setTimeout untuk simulasi proses asynchronous
+                setTimeout(async () => {
+                    try{
+                        await account.getBankAccount().deposit(ammount)
+                        resolve(true)
+                    }
+                    catch{
+                        reject(new Error("Kegagalan Sistem"))
+                    }
+                }, 1000)
+            })
+
+            await depositTransaction
 
             return {
                 status: "SUCCESS"
@@ -110,7 +125,26 @@ class BankingSystem{
             }
 
             const account = this.account.find((v) => v.getRekening() == auth.rekening)
-            await account.getbankAccount().withdraw(ammount)
+            
+
+            const withdrawTransaction = new Promise((resolve, reject) => {
+                // Implementasi setTimeout untuk simulasi proses asynchronous
+                setTimeout(async () => {
+                    try{
+                        if(await account.getBankAccount().withdraw(ammount)){
+                            resolve(true)
+                        }
+                        else{
+                            reject(new Error("Saldo tidak mencukupi"))
+                        }
+                    }
+                    catch{
+                        reject(new Error("Kegagalan Sistem"))
+                    }
+                }, 1000)
+            })
+
+            await withdrawTransaction
             
             return {
                 status: "SUCCESS"
@@ -135,7 +169,20 @@ class BankingSystem{
             }
 
             const account = this.account.find((v) => v.getRekening() == auth.rekening)
-            const saldo = account.getbankAccount().cekSaldo()
+
+            const cekSaldo = new Promise((resolve, reject) => {
+                // Implementasi setTimeout untuk simulasi proses asynchronous
+                setTimeout(async () => {
+                    try{
+                        const saldo = account.getBankAccount().cekSaldo()
+                        resolve(saldo)
+                    }
+                    catch{
+                        reject(new Error("Kegagalan Sistem"))
+                    }
+                }, 1000)
+            })
+            const saldo = await cekSaldo
             
             return {
                 status: "SUCCESS",
@@ -152,7 +199,18 @@ class BankingSystem{
 
     async doSign(rekening, pin){
         try{
-            const account = this.account.find((v) => v.getRekening() === rekening && v.getPin() === pin)
+            const cekAkun = new Promise((resolve, reject) => {
+                setTimeout(async () => {
+                    try{
+                        const account = this.account.find((v) => v.getRekening() === rekening && v.getPin() === pin)
+                        resolve(account)
+                    }
+                    catch{
+                        reject(true)
+                    }
+                }, 1000)
+            })
+            const account = await cekAkun
             if(!account){
                 return {
                     status: "FAILED",
@@ -181,3 +239,124 @@ class BankingSystem{
     }
 }
 
+const bankingSystem = new BankingSystem("Azumi")
+
+function prompt(selector){
+    switch(selector){
+        case 1:
+            console.log("Pilih Menu : ")
+            console.log("1. Sign in")
+            console.log("2. Shutdown")
+            break
+        case 2:
+            console.log("Pilih Mode : ")
+            console.log("1. Cek Saldo")
+            console.log("2. Deposit")
+            console.log("3. Withdraw")
+            console.log("4. Sign Out")
+            break
+        case 3:
+            console.log("\n")
+            break
+        case 4:
+            console.log("BYE BYE !")
+            break
+        case 5:
+            console.log("Input tidak valid")
+        case 6:
+            console.log("=========================================")
+    }
+}
+
+async function main(){
+    let loop = true
+    while(loop){
+        let session = null
+        prompt(6)
+        prompt(1)
+        const input_1 = parseInt(readlineSync.question("=> "))
+        
+        switch(input_1){
+            case 1:
+                prompt(6)
+                const rekening = readlineSync.question("Masukkan no rekening => ")
+                const pin = readlineSync.question("Masukkan pin => ")
+                const cred = await bankingSystem.doSign(rekening, pin)
+                switch (cred.status) {
+                    case "SUCCESS":
+                        session = cred.cred;
+                        break;
+                    case "FAILED":
+                        prompt(6)
+                        console.log(cred.message);
+                        break
+                    case "ERROR":
+                        prompt(6)
+                        console.log(cred.message);
+                        break
+                }
+                break
+            case 2:
+                loop = false
+                prompt(4)
+                prompt(6)
+                break
+            default:
+                prompt(6)
+                prompt(5)
+        }
+        
+        while(session != null){
+            prompt(6)
+            prompt(2)
+            const input_2 = parseInt(readlineSync.question("=> "))
+            let ammount = 0
+            
+            switch(input_2){
+                case 1:
+                    prompt(6)
+                    const saldo = await bankingSystem.doCekSaldo(session)
+                    if(saldo.status === "FAILED"){
+                        console.log(saldo.message)
+                        break
+                    }
+                    console.log(`Saldo anda : ${saldo.saldo}`)
+                    break
+                case 2:
+                    prompt(6)
+                    ammount = parseInt(readlineSync.question("Ammount => "))
+                    const deposit = await bankingSystem.doDeposit(session, ammount)
+
+                    if(deposit.status === "FAILED"){
+                        console.log(deposit.message)
+                        break
+                    }
+                    
+                    console.log("Berhasil Deposit")
+                    break
+                case 3:
+                    prompt(6)
+                    ammount = parseInt(readlineSync.question("Ammount => "))
+                    const withdraw = await bankingSystem.doWithdraw(session, ammount)
+
+                    if(withdraw.status === "FAILED"){
+                        console.log(withdraw.message)
+                        break
+                    }
+                    
+                    console.log("Berhasil Withdraw")
+                    break
+                case 4:
+                    prompt(6)
+                    session = null
+                    prompt(4)
+                    break
+                default:
+                    prompt(6)
+                    prompt(5)
+            }
+        }
+    }
+}
+
+main()

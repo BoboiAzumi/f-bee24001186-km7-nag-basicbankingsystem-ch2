@@ -23,3 +23,5 @@ class BankAccount{
         return this.saldo
     }
 }
+
+module.exports = BankAccount
