@@ -1,6 +1,6 @@
 const readlineSync = require("readline-sync")
 const BankAccount = require("./bank_account.js")
-const Human = require("./human")
+const Human = require("./human.js")
 
 // Helper polymorphism
 const Banking = Base => class extends Base{
@@ -22,19 +22,19 @@ class UserBank extends Banking(Human){
     }
 
     getRekening(){
-        return this.nama
+        return this.rekening
     }
 
     getPin(){
-        return this.nama
+        return this.pin
     }
 
-    getBankingAccount(){
-        return this.nama
+    getBankAccount(){
+        return this.bankAccount
     }
 }
 
-class BankSystem{
+class BankingSystem{
     constructor(name){
         // Simulasi database akun
         this.account = []
@@ -85,7 +85,7 @@ class BankSystem{
             }
 
             const account = this.account.find((v) => v.getRekening() == auth.rekening)
-            await account.bankAccount.deposit(ammount)
+            await account.getbankAccount().deposit(ammount)
 
             return {
                 status: "SUCCESS"
@@ -100,14 +100,84 @@ class BankSystem{
     }
 
     async doWithdraw(credential, ammount){
-        // TODO
+        try{
+            const auth = await this.#auth(credential)
+            if(!auth){
+                return {
+                    status: "FAILED",
+                    message: "Error: Kesalahan Kredensial"
+                }
+            }
+
+            const account = this.account.find((v) => v.getRekening() == auth.rekening)
+            await account.getbankAccount().withdraw(ammount)
+            
+            return {
+                status: "SUCCESS"
+            }
+        }
+        catch(error){
+            return {
+                status: "FAILED",
+                message: error.message
+            }
+        }
     }
 
     async doCekSaldo(credential){
-        // TODO
+        try{
+            const auth = await this.#auth(credential)
+            if(!auth){
+                return {
+                    status: "FAILED",
+                    message: "Error: Kesalahan Kredensial"
+                }
+            }
+
+            const account = this.account.find((v) => v.getRekening() == auth.rekening)
+            const saldo = account.getbankAccount().cekSaldo()
+            
+            return {
+                status: "SUCCESS",
+                saldo
+            }
+        }
+        catch(error){
+            return {
+                status: "FAILED",
+                message: error.message
+            }
+        }
     }
 
     async doSign(rekening, pin){
-        // TODO
+        try{
+            const account = this.account.find((v) => v.getRekening() === rekening && v.getPin() === pin)
+            if(!account){
+                return {
+                    status: "FAILED",
+                    message: "Rekening atau pin anda salah"
+                }
+            }
+
+            const cred = new Date().getMilliseconds() + "PIN" + new Date().getTime()
+
+            this.credential.push({
+                cred,
+                rekening
+            })
+
+            return {
+                status: "SUCCESS",
+                cred
+            }
+         }
+        catch{
+            return {
+                status: "ERROR",
+                message: "Error: Kesalahan Sistem",
+            };
+        }
     }
 }
+
