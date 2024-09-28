@@ -263,8 +263,13 @@ function prompt(selector){
             break
         case 5:
             console.log("Input tidak valid")
+            break
         case 6:
             console.log("=========================================")
+            break
+        case 7:
+            console.log("Loading ...")
+            break
     }
 }
 
@@ -281,6 +286,7 @@ async function main(){
                 prompt(6)
                 const rekening = readlineSync.question("Masukkan no rekening => ")
                 const pin = readlineSync.question("Masukkan pin => ")
+                prompt(7)
                 const cred = await bankingSystem.doSign(rekening, pin)
                 switch (cred.status) {
                     case "SUCCESS":
@@ -314,6 +320,7 @@ async function main(){
             
             switch(input_2){
                 case 1:
+                    prompt(7)
                     prompt(6)
                     const saldo = await bankingSystem.doCekSaldo(session)
                     if(saldo.status === "FAILED"){
@@ -325,6 +332,7 @@ async function main(){
                 case 2:
                     prompt(6)
                     ammount = parseInt(readlineSync.question("Ammount => "))
+                    prompt(7)
                     const deposit = await bankingSystem.doDeposit(session, ammount)
 
                     if(deposit.status === "FAILED"){
@@ -337,6 +345,7 @@ async function main(){
                 case 3:
                     prompt(6)
                     ammount = parseInt(readlineSync.question("Ammount => "))
+                    prompt(7)
                     const withdraw = await bankingSystem.doWithdraw(session, ammount)
 
                     if(withdraw.status === "FAILED"){

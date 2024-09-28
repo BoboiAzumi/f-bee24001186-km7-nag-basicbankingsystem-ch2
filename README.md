@@ -20,6 +20,27 @@ node banking_system.js
 
 3 . Masukkan pilih Sign in, kemudian masukkan akun.
 
+Catatan : untuk masuk ke menu, hanya input angka di depan menu nya
+
+misalnya
+<pre>
+Pilih Menu :
+1. Sign in
+2. Shutdown
+</pre>
+
+Maka di bagian input hanya mengetikan 1 jika memilih Sign in
+<pre>
+=> 1
+</pre>
+
+atau
+
+Maka di bagian input hanya mengetikan 2 jika memilih Shutdown
+<pre>
+=> 2
+</pre>
+
 4 . Akun :
 <pre>
 akun pertama
