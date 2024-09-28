@@ -18,6 +18,19 @@ atau
 node banking_system.js
 ```
 
+3 . Masukkan pilih Sign in, kemudian masukkan akun.
+
+4 . Akun :
+<pre>
+akun pertama
+rekening : 12345
+pin : 1234
+
+akun kedua
+rekening : 54321
+pin : 1234
+</pre>
+
 ## Tentang
 <pre>
 Nama    : Naufal Azmi Ginting
