@@ -197,6 +197,31 @@ class BankingSystem{
         }
     }
 
+    async getNama(credential){
+        try{
+            const auth = await this.#auth(credential)
+            if(!auth){
+                return {
+                    status: "FAILED",
+                    message: "Error: Kesalahan Kredensial"
+                }
+            }
+
+            const account = this.account.find((v) => v.getRekening() == auth.rekening)
+            
+            return {
+                status: "SUCCESS",
+                nama: account.getNama()
+            }
+        }
+        catch(error){
+            return {
+                status: "FAILED",
+                message: error.message
+            }
+        }
+    }
+
     async doSign(rekening, pin){
         try{
             const cekAkun = new Promise((resolve, reject) => {
@@ -314,6 +339,10 @@ async function main(){
         
         while(session != null){
             prompt(6)
+            const namaObj = await bankingSystem.getNama(session)
+            const nama = namaObj.status != "FAILED" ? namaObj.nama : namaObj.message
+            console.log(`Halo ${nama}, Selamat datang di bank ${bankingSystem.bank_name}`)
+            prompt(6)
             prompt(2)
             const input_2 = parseInt(readlineSync.question("=> "))
             let ammount = 0
@@ -325,9 +354,11 @@ async function main(){
                     const saldo = await bankingSystem.doCekSaldo(session)
                     if(saldo.status === "FAILED"){
                         console.log(saldo.message)
+                        readlineSync.question("[Tekan Enter]=> ")
                         break
                     }
                     console.log(`Saldo anda : ${saldo.saldo}`)
+                    readlineSync.question("[Tekan Enter]=> ")
                     break
                 case 2:
                     prompt(6)
@@ -337,10 +368,12 @@ async function main(){
 
                     if(deposit.status === "FAILED"){
                         console.log(deposit.message)
+                        readlineSync.question("[Tekan Enter]=> ")
                         break
                     }
                     
                     console.log("Berhasil Deposit")
+                    readlineSync.question("[Tekan Enter]=> ")
                     break
                 case 3:
                     prompt(6)
@@ -350,10 +383,12 @@ async function main(){
 
                     if(withdraw.status === "FAILED"){
                         console.log(withdraw.message)
+                        readlineSync.question("[Tekan Enter]=> ")
                         break
                     }
                     
                     console.log("Berhasil Withdraw")
+                    readlineSync.question("[Tekan Enter]=> ")
                     break
                 case 4:
                     prompt(6)
