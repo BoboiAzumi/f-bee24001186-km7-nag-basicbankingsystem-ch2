@@ -80,8 +80,8 @@ class AccountsService{
                 }
             })
         }
-        catch{
-            throw new Error("Failed to change data")
+        catch (e) {
+            throw e
         }
     }
 
