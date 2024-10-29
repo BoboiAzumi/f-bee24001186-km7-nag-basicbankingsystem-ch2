@@ -6,7 +6,7 @@ const transfer_validation = Joi.object({
     destinationBankAccountNumber: Joi.number().required(),
     amount: Joi.number().required()
 })
-
+ 
 class TransactionsService{
     constructor(){
         this._tbTransactions = prisma.transaction
@@ -15,7 +15,7 @@ class TransactionsService{
 
     async transfer(data){
         try{
-            const {sourceBankAccountNumber, destinationBankAccountNumber, amount} = data
+            const {sourceBankAccountNumber, destinationBankAccountNumber, amount, userId} = data
 
             const validation = transfer_validation.validate({
                 sourceBankAccountNumber,
@@ -27,10 +27,10 @@ class TransactionsService{
                 throw new Error(validation.error)
             }
 
-            const source = await this._tbBankAccounts.findMany({where: {bankAccountNumber: sourceBankAccountNumber}})
-            const destination = await this._tbBankAccounts.findMany({where: {bankAccountNumber: destinationBankAccountNumber}})
+            const source = await this._tbBankAccounts.findMany({where: {bankAccountNumber: sourceBankAccountNumber, userId}})
+            const destination = await this._tbBankAccounts.findMany({where: {bankAccountNumber: destinationBankAccountNumber, userId}})
 
-            if(source.length == 0 || destination == 0){
+            if(source.length == 0 || destination.length == 0){
                 throw new Error("Source bank account number or destination bank account number invalid")
             }
 
@@ -66,7 +66,7 @@ class TransactionsService{
         }
     }
 
-    async getTrasactionBy(c){
+    async getTransactionBy(c){
         try{
             return await this._tbTransactions.findMany({where: c, include: {source: true, destination: true}})
         }

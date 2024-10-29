@@ -1,5 +1,7 @@
 const { prisma } = require("../db/Client")
 const Joi = require("joi")
+const bcrypt = require("bcrypt")
+const { bcryptSalt } = require("../hash")
 
 const create_schema = Joi.object({
     name: Joi.string().min(3).max(128).required(), // Max 128 karakter ?, karena nama dosen saya ada yang lebih dari 70 karakter :D
@@ -51,7 +53,7 @@ class UsersProfilesService {
                 this._tbUsers.create({ data: {
                     name: user.name,
                     email: user.email,
-                    password: user.password,
+                    password: await bcrypt.hash(user.password, bcryptSalt),
                     profile: {
                         create: [
                             {
@@ -87,12 +89,21 @@ class UsersProfilesService {
         }
     }
 
+    async findFirst(c, includeProfile = false){
+        try{
+            return this._tbUsers.findFirst({where : c, include: { profile: includeProfile }})
+        }
+        catch{
+            throw new Error("Failed to fetch data")
+        }
+    }
+
     async updateUser(criteria, data){
         try{
             const validation = user_update_schema.validate({
                 name: data.name, 
                 email: data.email, 
-                password: data.password,
+                password: await bcrypt.hash(data.password, bcryptSalt)
             })
 
             if(validation.error){
@@ -101,7 +112,7 @@ class UsersProfilesService {
 
             await this._tbUsers.update({
                 where: criteria,
-                data
+                data: validation.value
             })
         }
         catch (e){

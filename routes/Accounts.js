@@ -8,7 +8,6 @@ const router = Router();
     
     {
         "data": {
-            "userId": <id>,
             "bankName": "Bank X"
         }
     }

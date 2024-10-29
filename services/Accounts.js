@@ -26,16 +26,16 @@ class AccountsService{
     }
 
     async create(account){
-        const validation = create_validation.validate({
-            userId: account.userId,
-            bankName: account.bankName
-        })
-
-        if(validation.error){
-            throw new Error(validation.error)
-        }
-
         try{
+            const validation = create_validation.validate({
+                userId: account.userId,
+                bankName: account.bankName
+            })
+
+            if(validation.error){
+                throw new Error(validation.error)
+            }
+
             await prisma.$transaction([
                 this._tbBankAccounts.create({data: account})
             ])
@@ -66,13 +66,13 @@ class AccountsService{
     async updateAccount(criteria, data){
         try{
             const validation = update_validation.validate({
-                userId: data.userId,
                 bankName: data.bankName
             })
     
             if(validation.error){
                 throw new Error(validation.error)
             }
+
             await this._tbBankAccounts.update({
                 where: criteria,
                 data: {
@@ -85,7 +85,7 @@ class AccountsService{
         }
     }
 
-    async deleteUserProfile(accountId){
+    async deleteBankAccount(accountId, userId){
         try{
             const validation = identifier.validate({id: accountId})
 
@@ -94,7 +94,7 @@ class AccountsService{
             }
 
             await prisma.$transaction([
-                this._tbBankAccounts.delete({where: {id: accountId}})
+                this._tbBankAccounts.delete({where: {id: accountId, userId}})
             ])
         }
         catch(e){
@@ -107,7 +107,7 @@ class AccountsService{
         }
     }
 
-    async deposit(id, amount){
+    async deposit(id, amount, userId){
         try{
             const validation = wd.validate({
                 amount,
@@ -118,20 +118,20 @@ class AccountsService{
                 throw new Error(validation.error)
             }
             
-            const account = await this._tbBankAccounts.findMany({where: {id}})
+            const account = await this._tbBankAccounts.findMany({where: {id, userId}})
 
             if(account.length == 0){
                 throw new Error("Account not found")
             }
 
-            await this._tbBankAccounts.update({where: {id}, data: { balance: account[0].balance + amount}})
+            await this._tbBankAccounts.update({where: {id, userId}, data: { balance: account[0].balance + amount}})
         }
         catch (e){
             throw e
         }
     }
 
-    async withdraw(id, amount){
+    async withdraw(id, amount, userId){
         try{
             const validation = wd.validate({
                 amount,
@@ -142,13 +142,13 @@ class AccountsService{
                 throw new Error(validation.error)
             }
 
-            const account = await this._tbBankAccounts.findMany({where: {id}})
+            const account = await this._tbBankAccounts.findMany({where: {id, userId}})
 
             if(account.length == 0){
                 throw new Error("Account not found")
             }
 
-            await this._tbBankAccounts.update({where: {id}, data: { balance: account[0].balance - amount}})
+            await this._tbBankAccounts.update({where: {id, userId}, data: { balance: account[0].balance - amount}})
         }
         catch (e){
             throw e
