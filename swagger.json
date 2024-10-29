@@ -1,0 +1,914 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Bank System",
+        "version": "0.1.0",
+        "description": "This is Bank System API documentation",
+        "contact": {
+            "name": "Naufal Azmi Ginting",
+            "url": "https://github.com/boboiazumi",
+            "email": "naufal2404ginting@gmail.com"
+        }
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000"
+        }
+    ],
+    "paths": {
+        "/api/v1/users": {
+            "get": {
+                "summary": "List all users",
+                "description": "List all users",
+                "tags": ["users"],
+                "responses": {
+                    "200": {
+                        "description": "The List Of the books",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "ok"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "number",
+                                                        "example": 1
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Anton Wibowo"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "anton@gmail.com"
+                                                    },
+                                                    "password": {
+                                                        "type": "string",
+                                                        "example": "$2b$04$9o0rDYDbVrrzpnXBupjf6e2D/KIDWC.7m7qrbMTzyEQ3jV8firisW"
+                                                    }
+                                                }
+                                            },
+                                            "example": [
+                                                {
+                                                    "id": 39,
+                                                    "name": "Zaenal Abidin",
+                                                    "email": "nadiakomalasari@gmail.com",
+                                                    "password": "$2b$04$9o0rDYDbVrrzpnXBupjf6e2D/KIDWC.7m7qrbMTzyEQ3jV8firisW"
+                                                },
+                                                {
+                                                    "id": 40,
+                                                    "name": "Achzanu Wibowo",
+                                                    "email": "achzanu@gmail.com",
+                                                    "password": "$2b$04$JQp//mO4uTladWplMmQ5KuGYf88Iz7qNWJXOVnJymAsh40EujpYKu"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create Users",
+                "description": "Create Users",
+                "tags": ["users"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "data": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Zaenal Abidin"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "example": "nadiakomalasari@gmail.com"
+                                            },
+                                            "password": {
+                                                "type": "string",
+                                                "example": "ZaenalAbidin12345"
+                                            },
+                                            "profile": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "identityType": {
+                                                        "type": "string",
+                                                        "example": "KTP"
+                                                    },
+                                                    "identityNumber": {
+                                                        "type": "string",
+                                                        "example": "1023342764323"
+                                                    },
+                                                    "address": {
+                                                        "type": "string",
+                                                        "example": "Alamat Rumah Zaenal Abidin"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success create new user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "SUCCESS"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{id}": {
+            "get": {
+                "summary": "Get user by id",
+                "description": "Get user by id",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true,
+                        "description": "User id"
+                    }
+                ],
+                "tags": ["users"],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "OK"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "number",
+                                                    "example": 39
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Zaenal Abidin"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "nadiakomalasari@gmail.com"
+                                                },
+                                                "password": {
+                                                    "type": "string",
+                                                    "example": "OK"
+                                                },
+                                                "profile": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "number",
+                                                                "example": 39
+                                                            },
+                                                            "userId": {
+                                                                "type": "number",
+                                                                "example": 39
+                                                            },
+                                                            "identityType": {
+                                                                "type": "string",
+                                                                "example": "KTP"
+                                                            },
+                                                            "identityNumber": {
+                                                                "type": "string",
+                                                                "example": "1023342764323"
+                                                            },
+                                                            "address": {
+                                                                "type": "string",
+                                                                "example": "Zaenal Abidin House"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "summary": "Update users",
+                "description": "Update users",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true,
+                        "description": "User id"
+                    }
+                ],
+                "tags": ["users"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "data": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Zaenal Abidin"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "example": "zaenalabidin@gmail.com"
+                                            },
+                                            "password": {
+                                                "type": "string",
+                                                "example": "12345678"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "SUCCESS"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true,
+                        "description": "User id"
+                    }
+                ],
+                "summary": "Delete user",
+                "description": "Delete user",
+                "tags": ["users"],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "SUCCESS"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{id}/profile": {
+            "parameters": [
+                {
+                    "in": "path",
+                    "name": "id",
+                    "schema": {
+                        "type": "integer"
+                    },
+                    "required": true,
+                    "description": "User id"
+                }
+            ],
+            "patch": {
+                "tags": ["users"],
+                "summary": "Update profile",
+                "description": "Update profile",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "data": {
+                                        "type": "object",
+                                        "properties": {
+                                            "identityType": {"type": "string", "example":"KTP"},
+                                            "identityNumber": {"type": "string", "example": "12043434324"},
+                                            "address": {"type": "string", "example": "New Alamat Alamat"}
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "SUCCESS"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+		"/api/v1/accounts": {
+			"get": {
+				"description": "Get all bank account",
+                "summary": "Get all bank account",
+				"tags": ["accounts"],
+				"responses": {
+					"200":{
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": {"type": "string", "example": "OK"},
+										"data": {"type": "array", "items": {
+											"properties": {
+												"id": {"type": "number", "example": 49},
+												"userId": {"type": "number", "example": 49},
+												"bankName": {"type": "string", "example": "BANK INDONESIA"},
+            									"bankAccountNumber": {"type": "number", "example": 49},
+           										"balance": {"type": "number", "example": 5000}
+											}
+										}}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"description": "Add new bank account",
+                "summary": "Add new bank account",
+				"tags": ["accounts"],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"data" : {
+										"type" :"object",
+										"properties": {
+											"bankName": {"type":"string", "example": "BANK INDONESIA"}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200":{
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": {"type": "string", "example": "OK"}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/accounts/{id}": {
+			"parameters": [
+                {
+                    "in": "path",
+                    "name": "id",
+                    "schema": {
+                        "type": "integer"
+                    },
+                    "required": true,
+                    "description": "Bank account id"
+                }
+            ],
+			"get": {
+				"description": "Get account by id",
+                "summary": "Get account by id",
+				"tags": ["accounts"],
+				"responses": {
+					"200":{
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": {"type": "string", "example": "OK"},
+										"data": {"type": "object", "properties": {
+											"id": {"type": "number", "example": 49},
+											"userId": {"type": "number", "example": 49},
+											"bankName": {"type": "string", "example": "BANK INDONESIA"},
+            								"bankAccountNumber": {"type": "number", "example": 49},
+           									"balance": {"type": "number", "example": 5000}
+										}}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"patch": {
+				"description": "Update bank account",
+                "summary": "Update bank account",
+				"tags": ["accounts"],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"data" : {
+										"type" :"object",
+										"properties": {
+											"bankName": {"type":"string", "example": "BANK INDONESIA"}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200":{
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": {"type": "string", "example": "OK"}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"description": "Delete bank account",
+                "summary": "Delete bank account",
+				"tags": ["accounts"],
+				"responses": {
+					"200":{
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": {"type": "string", "example": "OK"}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/accounts/{id}/deposit" : {
+			"parameters": [
+                {
+                    "in": "path",
+                    "name": "id",
+                    "schema": {
+                        "type": "integer"
+                    },
+                    "required": true,
+                    "description": "Bank account id"
+                }
+            ],
+			"patch": {
+				"description": "Deposit balance",
+                "summary": "Deposit balance",
+				"tags": ["accounts"],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"data" : {
+										"type" :"object",
+										"properties": {
+											"amount": {"type":"number", "example": 1000}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200":{
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": {"type": "string", "example": "OK"}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/accounts/{id}/withdraw" : {
+			"parameters": [
+                {
+                    "in": "path",
+                    "name": "id",
+                    "schema": {
+                        "type": "integer"
+                    },
+                    "required": true,
+                    "description": "Bank account id"
+                }
+            ],
+			"patch": {
+				"description": "Withdraw balance",
+                "summary": "Withdraw balance",
+				"tags": ["accounts"],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"data" : {
+										"type" :"object",
+										"properties": {
+											"amount": {"type":"number", "example": 1000}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200":{
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": {"type": "string", "example": "OK"}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/transactions": {
+			"get": {
+				"description": "List of transactions",
+				"summary": "List of transactions",
+				"tags": ["transactions"],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": {"type": "string", "example":"OK"},
+										"data": {
+											"type": "array",
+											"items": {
+												"properties": {
+													"id": {"type": "number", "example": 6},
+													"sourceAccountId": {"type": "number", "example": 49},
+													"destinationAccountId": {"type": "number", "example": 50},
+													"amount": {"type": "number", "example": 5000}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"description": "Create new transactions",
+				"summary": "Create new transactions",
+				"tags": ["transactions"],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"data": {"type": "object", "properties": {
+										"sourceBankAccountNumber": {"type": "number", "example": 49},
+            							"destinationBankAccountNumber": {"type": "number", "example": 50},
+            							"amount": {"type": "number", "example": 1000}
+									}}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": {"type": "string", "example":"OK"}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/transactions/{id}": {
+			"parameters": [
+                {
+                    "in": "path",
+                    "name": "id",
+                    "schema": {
+                        "type": "integer"
+                    },
+                    "required": true,
+                    "description": "Transactions id"
+                }
+            ],
+			"get": {
+				"description": "Get transactions by id",
+				"summary": "Get transactions by id",
+				"tags": ["transactions"],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": {"type": "string", "example":"OK"},
+										"data": {
+											"type": "array",
+											"items": {
+												"properties": {
+													"id": {"type": "number", "example": 6},
+													"sourceAccountId": {"type": "number", "example": 50},
+													"destinationAccountId": {"type": "number", "example": 49},
+													"amount": {"type": "number", "example": 5000},
+													"source": {"type": "object", "properties": {
+														"id": {"type": "number", "example": 50},
+                										"userId": {"type": "number", "example": 39},
+                										"bankName": {"type": "string", "example": "BANK INDONESIA"},
+                										"bankAccountNumber": {"type": "number", "example": 50},
+                										"balance": {"type": "number", "example": 1000}
+													}},
+													"destination": {"type": "object", "properties": {
+														"id": {"type": "number", "example": 49},
+                										"userId": {"type": "number", "example": 38},
+                										"bankName": {"type": "string", "example": "BANK INDONESIA"},
+                										"bankAccountNumber": {"type": "number", "example": 49},
+                										"balance": {"type": "number", "example": 1000}
+													}}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+        "/api/v1/register": {
+            "post": {
+                "summary": "Register Users",
+                "description": "Register Users",
+                "tags": ["register"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "data": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Zaenal Abidin"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "example": "nadiakomalasari@gmail.com"
+                                            },
+                                            "password": {
+                                                "type": "string",
+                                                "example": "ZaenalAbidin12345"
+                                            },
+                                            "profile": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "identityType": {
+                                                        "type": "string",
+                                                        "example": "KTP"
+                                                    },
+                                                    "identityNumber": {
+                                                        "type": "string",
+                                                        "example": "1023342764323"
+                                                    },
+                                                    "address": {
+                                                        "type": "string",
+                                                        "example": "Alamat Rumah Zaenal Abidin"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success create new user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "SUCCESS"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/authenticate": {
+            "post": {
+                "summary": "Authenticate",
+                "description": "Authenticate",
+                "tags": ["authenticate"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "data": {
+                                        "type": "object",
+                                        "properties": {
+                                            "email": {
+                                                "type": "string",
+                                                "example": "nadiakomalasari@gmail.com"
+                                            },
+                                            "password": {
+                                                "type": "string",
+                                                "example": "ZaenalAbidin12345"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success create new user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "SUCCESS"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzksImlhdCI6MTczMDIxNzE4MiwiZXhwIjoxNzMwMzAzNTgyfQ.UKGeoI5TeFt2KXshKssSmLiNY6fUn8XZ-8AL8HXIsBY"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+		"securitySchemes": {
+			"bearerAuth":{
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		}
+	},
+	"security": [
+		{"bearerAuth": []}
+	],
+    "tags": [
+        {
+            "name": "users",
+            "description": "The Users managing API"
+        }
+    ]
+}
