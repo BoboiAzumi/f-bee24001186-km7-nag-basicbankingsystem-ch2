@@ -1,10 +1,8 @@
-const { TransactionsService } = require("../services/Transactions")
-
-const transaction = new TransactionsService()
+const { transactionsService } = require("./helper/TransactionsServiceInstance")
 
 async function transfer(req, res, next){
     try{
-        await transaction.transfer(req.body.data)
+        await transactionsService.transfer({...req.body.data, userId: req.user.id})
         res.status(201)
         res.json({
             status: "OK"
@@ -17,7 +15,7 @@ async function transfer(req, res, next){
 
 async function getAllTransactions(req, res, next){
     try{
-        const transactions = await transaction.getAllTransactions()
+        const transactions = await transactionsService.getAllTransactions()
         res.json({
             status: "OK",
             data: transactions
@@ -30,7 +28,7 @@ async function getAllTransactions(req, res, next){
 
 async function getTransactionsBy(req, res, next){
     try{
-        const transactions = await transaction.getTrasactionBy({id: parseInt(req.params.id)})
+        const transactions = await transactionsService.getTransactionBy({id: parseInt(req.params.id)})
         res.json({
             status: "OK",
             data: transactions

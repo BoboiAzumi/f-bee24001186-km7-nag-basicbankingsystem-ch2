@@ -1,15 +1,13 @@
-const { AccountsService } = require("../services/Accounts")
-const { UsersProfilesService } = require("../services/UsersProfiles")
-
-const accounts = new AccountsService()
-const usersProfiles = new UsersProfilesService()
+const { accountsService } = require("./helper/AccountServiceInstance")
+const { usersProfilesService } = require("./helper/UsersProfilesServiceInstance")
 
 async function createAccount(req, res, next){
     try{
-        const countUser = await usersProfiles.findBy({id: req.body.data.userId})
-        if(countUser.length == 0) throw new Error(`User with id ${req.body.data.userId} not found`)
-        await accounts.create({
-            userId: req.body.data.userId,
+        const countUser = await usersProfilesService.findBy({id: req.user.id})
+        if(countUser.length == 0) throw new Error(`User with id ${req.user.id} not found`)
+
+        await accountsService.create({
+            userId: req.user.id,
             bankName: req.body.data.bankName
         })
         res.status(201)
@@ -24,7 +22,7 @@ async function createAccount(req, res, next){
 
 async function getAllAccounts(req, res, next){
     try{
-        const findAccounts = await accounts.getAllAccounts()
+        const findAccounts = await accountsService.getAccountBy({userId: req.user.id})
         res.json({
             status: "OK",
             data: findAccounts
@@ -37,7 +35,7 @@ async function getAllAccounts(req, res, next){
 
 async function getAccountById(req, res, next){
     try{
-        const findAccounts = await accounts.getAccountBy({id: parseInt(req.params.id)})
+        const findAccounts = await accountsService.getAccountBy({id: parseInt(req.params.id), userId: req.user.id})
         res.json({
             status: "OK",
             data: findAccounts[0] ? findAccounts[0] : {}
@@ -51,7 +49,7 @@ async function getAccountById(req, res, next){
 async function updateAccount(req, res, next){
     const id = parseInt(req.params.id)
     try{
-        await accounts.updateAccount({id: id}, req.body.data)
+        await accountsService.updateAccount({id: id, userId: req.user.id}, req.body.data)
         res.json({
             status: "OK"
         })
@@ -64,7 +62,7 @@ async function updateAccount(req, res, next){
 async function deleteAccount(req, res, next){
     const id = parseInt(req.params.id)
     try{
-        await accounts.deleteUserProfile(id)
+        await accountsService.deleteBankAccount(id, req.user.id)
         res.json({
             status: "OK"
         })
@@ -77,7 +75,7 @@ async function deleteAccount(req, res, next){
 async function deposit(req, res, next){
     const id = parseInt(req.params.id)
     try{
-        await accounts.deposit(id, req.body.data.amount)
+        await accountsService.deposit(id, req.body.data.amount, req.user.id)
         res.json({
             status: "OK"
         })
@@ -90,7 +88,7 @@ async function deposit(req, res, next){
 async function withdraw(req, res, next){
     const id = parseInt(req.params.id)
     try{
-        await accounts.withdraw(id, req.body.data.amount)
+        await accountsService.withdraw(id, req.body.data.amount, req.user.id)
         res.json({
             status: "OK"
         })

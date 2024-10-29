@@ -1,9 +1,8 @@
-const { UsersProfilesService } = require("../services/UsersProfiles")
-const user = new UsersProfilesService()
+const { usersProfilesService } = require("./helper/UsersProfilesServiceInstance")
 
 async function getAllUsers(req, res, next){
     try{
-        const users = await user.findAll()
+        const users = await usersProfilesService.findAll()
         res.json({
             status: "OK",
             data: users
@@ -16,7 +15,7 @@ async function getAllUsers(req, res, next){
 
 async function getUserById(req, res, next){
     try{
-        const users = await user.findBy({id: parseInt(req.params.id)}, true)
+        const users = await usersProfilesService.findBy({id: parseInt(req.params.id)}, true)
         res.json({
             status: "OK",
             data: users[0] ? users[0] : {}
@@ -29,7 +28,7 @@ async function getUserById(req, res, next){
 
 async function newUser(req, res, next){
     try{
-        await user.create(req.body.data)
+        await usersProfilesService.create(req.body.data)
         res.status(201)
         res.json({
             status: "SUCCESS"
@@ -37,7 +36,6 @@ async function newUser(req, res, next){
     }
     catch(e){
         if(e.name == "PrismaClientValidationError"){
-            console.log(e)
             next(new Error("Data tidak lengkap"))
         }
         else{
@@ -48,7 +46,7 @@ async function newUser(req, res, next){
 
 async function updateUser(req, res, next){
     try{
-        await user.updateUser({id: parseInt(req.params.id)}, req.body.data)
+        await usersProfilesService.updateUser({id: parseInt(req.params.id)}, req.body.data)
         res.json({
             status: "SUCCESS"
         })
@@ -60,7 +58,7 @@ async function updateUser(req, res, next){
 
 async function updateProfile(req, res, next){
     try{
-        await user.updateProfile(parseInt(req.params.id), req.body.data)
+        await usersProfilesService.updateProfile(parseInt(req.params.id), req.body.data)
         res.json({
             status: "SUCCESS"
         })
@@ -72,7 +70,7 @@ async function updateProfile(req, res, next){
 
 async function deleteUserProfile(req, res, next){
     try{
-        await user.deleteUserProfile(parseInt(req.params.id))
+        await usersProfilesService.deleteUserProfile(parseInt(req.params.id))
         res.json({
             status: "SUCCESS"
         })
