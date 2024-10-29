@@ -69,7 +69,7 @@ describe("Test UsersProfileService", () => {
                 }
             }
 
-            bcrypt.hash.mockReturnValue("InginMenjadiProgrammerHandalNamunEngganNgoding")
+            bcrypt.hash.mockReturnValueOnce("InginMenjadiProgrammerHandalNamunEngganNgoding")
 
             await service.create(user)
 
@@ -334,6 +334,8 @@ describe("Test UsersProfileService", () => {
                 password: "zaenalabidin123"
             }
 
+            bcrypt.hash.mockReturnValueOnce("zaenalabidin123")
+
             await service.updateUser(criteria, data)
 
             expect(prisma.user.update).toHaveBeenCalledWith({
@@ -352,6 +354,8 @@ describe("Test UsersProfileService", () => {
                 email: "zaenalabidin@gmail.com",
                 password: "zaenalabidin123"
             }
+
+            bcrypt.hash.mockReturnValueOnce("zaenalabidin123")
 
             await service.updateUser(criteria, data)
 
