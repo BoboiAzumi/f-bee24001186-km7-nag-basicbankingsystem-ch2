@@ -1,6 +1,4 @@
-const { Authentication } = require("../services/Authentication")
-
-const Auth = new Authentication()
+const { Auth } = require("./helper/Authentication")
 
 async function auth(req, res, next){
     try{
