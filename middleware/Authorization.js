@@ -1,6 +1,4 @@
-const { Authentication } = require("../services/Authentication")
-
-const auth = new Authentication()
+const { auth } = require("./helper/AuthorizationInstance")
 
 async function Authorization(req, res, next){
     try{
@@ -18,7 +16,7 @@ async function Authorization(req, res, next){
             throw new Error()
         }
     }
-    catch{
+    catch (e){
         res.status(401).json({
             status: "UNAUTHORIZED"
         })
