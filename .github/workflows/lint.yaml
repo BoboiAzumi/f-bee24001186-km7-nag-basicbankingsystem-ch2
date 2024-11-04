@@ -1,7 +1,5 @@
-name: CI Banking System
-on: 
-  pull_request: 
-    branches: ["main"]
+name: CI Banking System Linter
+on: [workflow_call]
 
 jobs: 
     build:
