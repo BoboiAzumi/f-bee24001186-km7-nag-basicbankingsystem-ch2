@@ -17,6 +17,6 @@ jobs:
         - run: npm run test
 
         - name: Upload result to codecov
-          uses: codecov/codecov-actions@v4
+          uses: codecov/codecov-action@v4
           with:
             token: ${{ secrets.CODECOV_TOKEN }}
