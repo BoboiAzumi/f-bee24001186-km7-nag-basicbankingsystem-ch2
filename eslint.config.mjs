@@ -12,7 +12,7 @@ export default [
       //'jsx-quotes': ['error', 'prefer-single'],
       //'linebreak-style': ['error', 'unix'],
       //'no-undef': 'off',
-      //'no-console': 'warn'//,
+      'no-console': 'error'//,
       //'comma-dangle': ['error', 'never'],
       //'no-unused-vars': [
       //  'warn',
