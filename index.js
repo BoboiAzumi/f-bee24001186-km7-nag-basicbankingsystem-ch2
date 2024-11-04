@@ -23,8 +23,6 @@ app.use('/api/v1/transactions', Authorization, TransactionRouter);
 app.use('/api/v1/authenticate', Authenticate);
 app.use('/api/v1/register', newUser);
 
-console.log('sdsandask');
-
 app.use((err, req, res, next) => {
   if (err.name == 'Error') {
     res.status(400);
