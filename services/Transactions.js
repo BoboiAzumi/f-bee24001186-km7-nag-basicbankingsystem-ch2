@@ -1,5 +1,5 @@
-const { prisma } = require("../db/Client")
-const Joi = require("joi")
+const { prisma } = require('../db/Client')
+const Joi = require('joi')
 
 const transfer_validation = Joi.object({
     sourceBankAccountNumber: Joi.number().required(),
@@ -31,15 +31,15 @@ class TransactionsService{
             const destination = await this._tbBankAccounts.findMany({where: {bankAccountNumber: destinationBankAccountNumber, userId}})
 
             if(source.length == 0 || destination.length == 0){
-                throw new Error("Source bank account number or destination bank account number invalid")
+                throw new Error('Source bank account number or destination bank account number invalid')
             }
 
             if(amount > source[0].balance){
-                throw new Error("Insufficient balance")
+                throw new Error('Insufficient balance')
             }
 
             if(sourceBankAccountNumber == destinationBankAccountNumber){
-                throw new Error("Unable to make transfer to the same account")
+                throw new Error('Unable to make transfer to the same account')
             }
 
             await prisma.$transaction([

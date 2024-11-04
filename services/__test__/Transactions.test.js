@@ -1,7 +1,7 @@
-const { TransactionsService } = require("../Transactions")
-const { prisma } = require("../../db/Client")
+const { TransactionsService } = require('../Transactions')
+const { prisma } = require('../../db/Client')
 
-jest.mock("../../db/Client", () => ({
+jest.mock('../../db/Client', () => ({
     prisma: {
         bankAccount: {
             create: jest.fn(),
@@ -19,15 +19,15 @@ jest.mock("../../db/Client", () => ({
     }
 }))
 
-describe("Transaction Test", () => {
+describe('Transaction Test', () => {
     let service
 
     beforeEach(() => {
         service = new TransactionsService()
     })
     
-    describe("Transfer", () => {
-        it("Should success Transfer", async () => {
+    describe('Transfer', () => {
+        it('Should success Transfer', async () => {
             const data = {
                 sourceBankAccountNumber: 1,
                 destinationBankAccountNumber: 2,
@@ -37,7 +37,7 @@ describe("Transaction Test", () => {
             const source = {
                 id: 1,
                 userId: 4,
-                bankName: "bank",
+                bankName: 'bank',
                 bankAccountNumber: 1,
                 balance: 10000
             }
@@ -45,7 +45,7 @@ describe("Transaction Test", () => {
             const destination = {
                 id: 2,
                 userId: 2,
-                bankName: "bank",
+                bankName: 'bank',
                 bankAccountNumber: 2,
                 balance: 0
             }
@@ -95,9 +95,9 @@ describe("Transaction Test", () => {
             })
         })
 
-        it("Should error validation", async () => {
+        it('Should error validation', async () => {
             const data = {
-                sourceBankAccountNumber: "abcd",
+                sourceBankAccountNumber: 'abcd',
                 destinationBankAccountNumber: 2,
                 amount: 2000
             }
@@ -116,10 +116,10 @@ describe("Transaction Test", () => {
 
             prisma.bankAccount.findMany.mockReturnValueOnce([])
 
-            await expect(service.transfer(data)).rejects.toThrow("Source bank account number or destination bank account number invalid")
+            await expect(service.transfer(data)).rejects.toThrow('Source bank account number or destination bank account number invalid')
         })
 
-        it("Should error Insufficient Balance", async () => {
+        it('Should error Insufficient Balance', async () => {
             const data = {
                 sourceBankAccountNumber: 1,
                 destinationBankAccountNumber: 2,
@@ -129,7 +129,7 @@ describe("Transaction Test", () => {
             const source = {
                 id: 1,
                 userId: 4,
-                bankName: "bank",
+                bankName: 'bank',
                 bankAccountNumber: 1,
                 balance: 0
             }
@@ -137,7 +137,7 @@ describe("Transaction Test", () => {
             const destination = {
                 id: 2,
                 userId: 2,
-                bankName: "bank",
+                bankName: 'bank',
                 bankAccountNumber: 2,
                 balance: 0
             }
@@ -146,10 +146,10 @@ describe("Transaction Test", () => {
 
             prisma.bankAccount.findMany.mockReturnValueOnce([destination])
 
-            await expect(service.transfer(data)).rejects.toThrow("Insufficient balance")
+            await expect(service.transfer(data)).rejects.toThrow('Insufficient balance')
         })
 
-        it("Should error same destination", async () => {
+        it('Should error same destination', async () => {
             const data = {
                 sourceBankAccountNumber: 1,
                 destinationBankAccountNumber: 1,
@@ -159,7 +159,7 @@ describe("Transaction Test", () => {
             const source = {
                 id: 1,
                 userId: 4,
-                bankName: "bank",
+                bankName: 'bank',
                 bankAccountNumber: 1,
                 balance: 2000
             }
@@ -167,7 +167,7 @@ describe("Transaction Test", () => {
             const destination = {
                 id: 1,
                 userId: 4,
-                bankName: "bank",
+                bankName: 'bank',
                 bankAccountNumber: 1,
                 balance: 0
             }
@@ -176,12 +176,12 @@ describe("Transaction Test", () => {
 
             prisma.bankAccount.findMany.mockReturnValueOnce([destination])
 
-            await expect(service.transfer(data)).rejects.toThrow("Unable to make transfer to the same account")
+            await expect(service.transfer(data)).rejects.toThrow('Unable to make transfer to the same account')
         })
     })
 
-    describe("Get All Transaction", () => {
-        it("Should return all transaction", async () => {
+    describe('Get All Transaction', () => {
+        it('Should return all transaction', async () => {
             const transactions = [
                 {
                     id: 1,
@@ -203,16 +203,16 @@ describe("Transaction Test", () => {
             expect(result).toEqual(transactions)
         })
 
-        it("Should return all transaction", async () => {
+        it('Should return all transaction', async () => {
             prisma.transaction.findMany.mockImplementation(() => {
-                throw new Error("Error bang")
+                throw new Error('Error bang')
             })
             await expect(service.getAllTransactions()).rejects.toThrow()
         })
     })
 
-    describe("Get Transaction By", () => {
-        it("Should return all transaction by", async () => {
+    describe('Get Transaction By', () => {
+        it('Should return all transaction by', async () => {
             const criteria = {
                 id: 1
             }
@@ -225,14 +225,14 @@ describe("Transaction Test", () => {
                     source: {
                         id: 2,
                         userId: 2,
-                        bankName: "bank",
+                        bankName: 'bank',
                         bankAccountNumber: 2,
                         balance: 995000
                     },
                     destination: {
                         id: 14,
                         userId: 4,
-                        bankName: "Inazuma Bank",
+                        bankName: 'Inazuma Bank',
                         bankAccountNumber: 14,
                         balance: 2000
                     }
@@ -245,12 +245,12 @@ describe("Transaction Test", () => {
             expect(result).toEqual(transactions)
         })
 
-        it("Should return all transaction", async () => {
+        it('Should return all transaction', async () => {
             const criteria = {
                 id: 1
             }
             prisma.transaction.findMany.mockImplementation(() => {
-                throw new Error("Error bang")
+                throw new Error('Error bang')
             })
             await expect(service.getTransactionBy(criteria)).rejects.toThrow()
         })

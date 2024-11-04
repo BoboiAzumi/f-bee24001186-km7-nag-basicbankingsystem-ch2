@@ -1,4 +1,4 @@
-const { Authentication } = require("../../services/Authentication")
+const { Authentication } = require('../../services/Authentication')
 
 const Auth = new Authentication()
 

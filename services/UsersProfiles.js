@@ -1,7 +1,7 @@
-const { prisma } = require("../db/Client")
-const Joi = require("joi")
-const bcrypt = require("bcrypt")
-const { bcryptSalt } = require("../hash")
+const { prisma } = require('../db/Client')
+const Joi = require('joi')
+const bcrypt = require('bcrypt')
+const { bcryptSalt } = require('../hash')
 
 const create_schema = Joi.object({
     name: Joi.string().min(3).max(128).required(), // Max 128 karakter ?, karena nama dosen saya ada yang lebih dari 70 karakter :D
@@ -76,7 +76,7 @@ class UsersProfilesService {
             return this._tbUsers.findMany()
         }
         catch{
-            throw new Error("Failed to fetch all data")
+            throw new Error('Failed to fetch all data')
         }
     }
 
@@ -85,7 +85,7 @@ class UsersProfilesService {
             return this._tbUsers.findMany({where : c, include: { profile: includeProfile }})
         }
         catch{
-            throw new Error("Failed to fetch data")
+            throw new Error('Failed to fetch data')
         }
     }
 
@@ -94,7 +94,7 @@ class UsersProfilesService {
             return this._tbUsers.findFirst({where : c, include: { profile: includeProfile }})
         }
         catch{
-            throw new Error("Failed to fetch data")
+            throw new Error('Failed to fetch data')
         }
     }
 
@@ -157,8 +157,8 @@ class UsersProfilesService {
             ])
         }
         catch(e){
-            if(e.name == "PrismaClientKnownRequestError"){
-                throw new Error("Data cannot be found")
+            if(e.name == 'PrismaClientKnownRequestError'){
+                throw new Error('Data cannot be found')
             }
             else{
                 throw e

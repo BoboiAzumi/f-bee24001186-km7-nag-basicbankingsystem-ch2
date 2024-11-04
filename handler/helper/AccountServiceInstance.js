@@ -1,4 +1,4 @@
-const { AccountsService } = require("../../services/Accounts");
+const { AccountsService } = require('../../services/Accounts');
 
 const accountsService = new AccountsService()
 

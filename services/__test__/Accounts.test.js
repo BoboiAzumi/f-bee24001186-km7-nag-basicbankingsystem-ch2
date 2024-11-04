@@ -1,9 +1,9 @@
-const { AccountsService } = require("../Accounts")
-const { prisma } = require("../../db/Client")
-const Joi = require("joi")
-const { PrismaClientKnownRequestError } = require("@prisma/client/runtime/library")
+const { AccountsService } = require('../Accounts')
+const { prisma } = require('../../db/Client')
+const Joi = require('joi')
+const { PrismaClientKnownRequestError } = require('@prisma/client/runtime/library')
 
-jest.mock("../../db/Client", () => ({
+jest.mock('../../db/Client', () => ({
     prisma: {
         bankAccount: {
             create: jest.fn(),
@@ -15,7 +15,7 @@ jest.mock("../../db/Client", () => ({
     }
 }))
 
-describe("Test AccountsService", () => {
+describe('Test AccountsService', () => {
     let service
 
     beforeEach(() => {
@@ -29,45 +29,45 @@ describe("Test AccountsService", () => {
         jest.clearAllMocks()
     })
 
-    describe("Create", () => {
-        it("Should create a new account", async () => {
-            const account = { userId : 1, bankName: "Test Bank"}
+    describe('Create', () => {
+        it('Should create a new account', async () => {
+            const account = { userId : 1, bankName: 'Test Bank'}
             await service.create(account)
 
             expect(prisma.bankAccount.create).toHaveBeenCalledWith({ data: account })
         })
 
-        it("Should error validation", async () => {
-            const account = { userId : "abcd", bankName: "Test Bank"}
+        it('Should error validation', async () => {
+            const account = { userId : 'abcd', bankName: 'Test Bank'}
 
             await expect(service.create(account)).rejects.toThrow()
         })
 
-        it("Should error database", async () => {
-            const account = { userId : 1, bankName: "Test Bank"}
+        it('Should error database', async () => {
+            const account = { userId : 1, bankName: 'Test Bank'}
 
             prisma.bankAccount.create.mockImplementation(() => {
-                throw new Error("Error Bang")
+                throw new Error('Error Bang')
             })
 
-            await expect(service.create(account)).rejects.toThrow("Error Bang")
+            await expect(service.create(account)).rejects.toThrow('Error Bang')
         })
     })
 
-    describe("Find All BankAccounts", () => {
-        it("Should return all BankAccounts", async () => {
+    describe('Find All BankAccounts', () => {
+        it('Should return all BankAccounts', async () => {
             const accounts = [
                 {
                     id: 4,
                     userId: 4,
-                    bankName: "bank",
+                    bankName: 'bank',
                     bankAccountNumber: 4,
                     balance: 0
                 },
                 {
                     id: 15,
                     userId: 4,
-                    bankName: "bank anto",
+                    bankName: 'bank anto',
                     bankAccountNumber: 15,
                     balance: 10
                 }
@@ -80,25 +80,25 @@ describe("Test AccountsService", () => {
             expect(result).toEqual(accounts)
         })
 
-        it("Should throw error", async () => {
+        it('Should throw error', async () => {
             prisma.bankAccount.findMany.mockImplementation(() => {
-                throw new Error("Error Bang")
+                throw new Error('Error Bang')
             })
 
-            await expect(service.getAllAccounts()).rejects.toThrow("Error Bang")
+            await expect(service.getAllAccounts()).rejects.toThrow('Error Bang')
         })
     })
 
-    describe("Find BankAccount by id", () => {
+    describe('Find BankAccount by id', () => {
         afterEach(() => {
             jest.clearAllMocks()
         })
-        it("Should return bank accounts by id", async () => {
+        it('Should return bank accounts by id', async () => {
             const accounts = [
                 {
                     id: 4,
                     userId: 4,
-                    bankName: "bank",
+                    bankName: 'bank',
                     bankAccountNumber: 4,
                     balance: 0
                 }
@@ -120,21 +120,21 @@ describe("Test AccountsService", () => {
             })
         })
 
-        it("Should throw error", async () => {
+        it('Should throw error', async () => {
             prisma.bankAccount.findMany.mockImplementation(() => {
-                throw new Error("Error Bang")
+                throw new Error('Error Bang')
             })
 
-            await expect(service.getAccountBy()).rejects.toThrow("Error Bang")
+            await expect(service.getAccountBy()).rejects.toThrow('Error Bang')
             prisma.bankAccount.findMany.mockReset()
         })
     })
 
-    describe("Update BankAccounts", () => {
-        it("Should update BankAccounts", async() => {
+    describe('Update BankAccounts', () => {
+        it('Should update BankAccounts', async() => {
             const criteria = { id : 1, userId : 1}
             const data = {
-                bankName: "bank",
+                bankName: 'bank',
             }
 
             await service.updateAccount(criteria, data)
@@ -145,7 +145,7 @@ describe("Test AccountsService", () => {
             })
         })
 
-        it("Should error validation", async() => {
+        it('Should error validation', async() => {
             const criteria = { id : 1, userId : 1}
             const data = {
                 bankName: 3,
@@ -154,27 +154,27 @@ describe("Test AccountsService", () => {
             await expect(service.updateAccount(criteria, data)).rejects.toThrow()
         })
 
-        it("Should error database", async() => {
+        it('Should error database', async() => {
             const criteria = { id : 1, userId : 1}
             const data = {
-                bankName: "Bank",
+                bankName: 'Bank',
             }
 
             prisma.bankAccount.update.mockImplementation(() => {
-                throw new Error("Error Bang")
+                throw new Error('Error Bang')
             })
 
-            await expect(service.updateAccount(criteria, data)).rejects.toThrow("Error Bang")
+            await expect(service.updateAccount(criteria, data)).rejects.toThrow('Error Bang')
             prisma.bankAccount.update.mockReset()
         })
     })
 
-    describe("Delete bankAccount", () => {
+    describe('Delete bankAccount', () => {
         afterEach(() => {
             jest.clearAllMocks()
         })
 
-        it("Should delete bankAccount", async() => {
+        it('Should delete bankAccount', async() => {
             const accountId = 1
             const userId = 1
 
@@ -185,37 +185,37 @@ describe("Test AccountsService", () => {
             })
         })
 
-        it("Should error validation", async() => {
-            const accountId = ""
+        it('Should error validation', async() => {
+            const accountId = ''
 
             await expect(service.deleteBankAccount(accountId)).rejects.toThrow()
         })
 
-        it("Should error no bankAccount", async() => {
+        it('Should error no bankAccount', async() => {
             const accountId = 1
             const userId = 1
 
             prisma.bankAccount.delete.mockImplementation(() => {
-                throw new PrismaClientKnownRequestError("Error", { code: 20, clientVersion: "0", meta: null, batchRequestIdx: null })
+                throw new PrismaClientKnownRequestError('Error', { code: 20, clientVersion: '0', meta: null, batchRequestIdx: null })
             })
 
             await expect(service.deleteBankAccount(accountId, userId)).rejects.toThrow()
         })
 
-        it("Should error database", async() => {
+        it('Should error database', async() => {
             const accountId = 1
             const userId = 1
 
             prisma.bankAccount.delete.mockImplementation(() => {
-                throw new Error("Error Bang")
+                throw new Error('Error Bang')
             })
 
-            await expect(service.deleteBankAccount(accountId, userId)).rejects.toThrow("Error Bang")
+            await expect(service.deleteBankAccount(accountId, userId)).rejects.toThrow('Error Bang')
         })
     })
 
-    describe("Deposit", () => {
-        it("Should success deposit", async () => {
+    describe('Deposit', () => {
+        it('Should success deposit', async () => {
             const id = 1
             const amount = 500
             const userId = 1
@@ -223,7 +223,7 @@ describe("Test AccountsService", () => {
                 {
                     id: 1,
                     userId: 1,
-                    bankName: "bank",
+                    bankName: 'bank',
                     bankAccountNumber: 1,
                     balance: 0
                 }
@@ -244,7 +244,7 @@ describe("Test AccountsService", () => {
             })
         })
 
-        it("Should error account not found", async () => {
+        it('Should error account not found', async () => {
             const id = 1
             const amount = 500
             const userId = 1
@@ -252,18 +252,18 @@ describe("Test AccountsService", () => {
 
             await prisma.bankAccount.findMany.mockReturnValue(value)
 
-            await expect(service.deposit(id, amount, userId)).rejects.toThrow("Account not found")
+            await expect(service.deposit(id, amount, userId)).rejects.toThrow('Account not found')
         })
 
-        it("Should error validation", async () => {
+        it('Should error validation', async () => {
             const id = null
-            const amount = "500"
+            const amount = '500'
             const userId = 1
 
             await expect(service.deposit(id, amount, userId)).rejects.toThrow()
         })
 
-        it("Should error database", async () => {
+        it('Should error database', async () => {
             const id = 1
             const amount = 500
             const userId = 1
@@ -271,7 +271,7 @@ describe("Test AccountsService", () => {
                 {
                     id: 1,
                     userId: 1,
-                    bankName: "bank",
+                    bankName: 'bank',
                     bankAccountNumber: 1,
                     balance: 0
                 }
@@ -280,31 +280,31 @@ describe("Test AccountsService", () => {
             await prisma.bankAccount.findMany.mockReturnValue(value)
 
             await prisma.bankAccount.update.mockImplementation(() => {
-                throw new Error("Error Bang")
+                throw new Error('Error Bang')
             })
             
-            await expect(service.deposit(id, amount, userId)).rejects.toThrow("Error Bang")
+            await expect(service.deposit(id, amount, userId)).rejects.toThrow('Error Bang')
 
             prisma.bankAccount.update.mockReset()
         })
 
-        it("Should error database", async () => {
+        it('Should error database', async () => {
             const id = 1
             const amount = 500
             const userId = 1
 
             await prisma.bankAccount.findMany.mockImplementation(() => {
-                throw new Error("Error Bang")
+                throw new Error('Error Bang')
             })
             
-            await expect(service.deposit(id, amount, userId)).rejects.toThrow("Error Bang")
+            await expect(service.deposit(id, amount, userId)).rejects.toThrow('Error Bang')
 
             prisma.bankAccount.findMany.mockReset()
         })
     })
 
-    describe("Withdraw", () => {
-        it("Should success deposit", async () => {
+    describe('Withdraw', () => {
+        it('Should success deposit', async () => {
             const id = 1
             const amount = 500
             const userId = 1
@@ -312,7 +312,7 @@ describe("Test AccountsService", () => {
                 {
                     id: 1,
                     userId: 1,
-                    bankName: "bank",
+                    bankName: 'bank',
                     bankAccountNumber: 1,
                     balance: 1000
                 }
@@ -333,7 +333,7 @@ describe("Test AccountsService", () => {
             })
         })
 
-        it("Should error account not found", async () => {
+        it('Should error account not found', async () => {
             const id = 1
             const amount = 1000
             const userId = 1
@@ -341,18 +341,18 @@ describe("Test AccountsService", () => {
 
             await prisma.bankAccount.findMany.mockReturnValue(value)
 
-            await expect(service.withdraw(id, amount, userId)).rejects.toThrow("Account not found")
+            await expect(service.withdraw(id, amount, userId)).rejects.toThrow('Account not found')
         })
 
-        it("Should error validation", async () => {
+        it('Should error validation', async () => {
             const id = null
-            const amount = "500"
+            const amount = '500'
             const userId = 1
 
             await expect(service.withdraw(id, amount, userId)).rejects.toThrow()
         })
 
-        it("Should error database", async () => {
+        it('Should error database', async () => {
             const id = 1
             const amount = 500
             const userId = 1
@@ -360,7 +360,7 @@ describe("Test AccountsService", () => {
                 {
                     id: 1,
                     userId: 1,
-                    bankName: "bank",
+                    bankName: 'bank',
                     bankAccountNumber: 1,
                     balance: 1000
                 }
@@ -369,24 +369,24 @@ describe("Test AccountsService", () => {
             await prisma.bankAccount.findMany.mockReturnValue(value)
 
             await prisma.bankAccount.update.mockImplementation(() => {
-                throw new Error("Error Bang")
+                throw new Error('Error Bang')
             })
             
-            await expect(service.withdraw(id, amount, userId)).rejects.toThrow("Error Bang")
+            await expect(service.withdraw(id, amount, userId)).rejects.toThrow('Error Bang')
 
             prisma.bankAccount.update.mockReset()
         })
 
-        it("Should error database", async () => {
+        it('Should error database', async () => {
             const id = 1
             const amount = 500
             const userId = 1
 
             await prisma.bankAccount.findMany.mockImplementation(() => {
-                throw new Error("Error Bang")
+                throw new Error('Error Bang')
             })
             
-            await expect(service.withdraw(id, amount, userId)).rejects.toThrow("Error Bang")
+            await expect(service.withdraw(id, amount, userId)).rejects.toThrow('Error Bang')
 
             prisma.bankAccount.findMany.mockReset()
         })

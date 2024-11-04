@@ -1,9 +1,9 @@
-const { auth } = require("./helper/AuthorizationInstance")
+const { auth } = require('./helper/AuthorizationInstance')
 
 async function Authorization(req, res, next){
     try{
         const { authorization } = req.headers
-        const token = authorization.split(" ")
+        const token = authorization.split(' ')
         const verify = await auth.validation(token[1])
 
         if(verify.id){
@@ -18,7 +18,7 @@ async function Authorization(req, res, next){
     }
     catch (e){
         res.status(401).json({
-            status: "UNAUTHORIZED"
+            status: 'UNAUTHORIZED'
         })
     }
 }

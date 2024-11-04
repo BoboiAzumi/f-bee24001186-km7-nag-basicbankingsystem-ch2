@@ -1,5 +1,5 @@
-const { Router } = require("express");
-const { createAccount, getAllAccounts, getAccountById, updateAccount, deleteAccount, withdraw, deposit } = require("../handler/accounts");
+const { Router } = require('express');
+const { createAccount, getAllAccounts, getAccountById, updateAccount, deleteAccount, withdraw, deposit } = require('../handler/accounts');
 const router = Router();
 
 /*******************************************************
@@ -12,11 +12,11 @@ const router = Router();
         }
     }
 ******************************************************/
-router.post("/", createAccount)
+router.post('/', createAccount)
 
-router.get("/", getAllAccounts)
+router.get('/', getAllAccounts)
 
-router.get("/:id", getAccountById)
+router.get('/:id', getAccountById)
 
 /*******************************************************
     JSON REQUEST FORMAT  (Withdraw)
@@ -28,7 +28,7 @@ router.get("/:id", getAccountById)
         }
     }
 ******************************************************/
-router.patch("/:id/withdraw", withdraw)
+router.patch('/:id/withdraw', withdraw)
 
 /*******************************************************
     JSON REQUEST FORMAT  (Deposit)
@@ -40,7 +40,7 @@ router.patch("/:id/withdraw", withdraw)
         }
     }
 ******************************************************/
-router.patch("/:id/deposit", deposit)
+router.patch('/:id/deposit', deposit)
 
 /*******************************************************
     JSON REQUEST FORMAT  (Update Accounts)
@@ -52,8 +52,8 @@ router.patch("/:id/deposit", deposit)
         }
     }
 ******************************************************/
-router.patch("/:id", updateAccount)
+router.patch('/:id', updateAccount)
 
-router.delete("/:id", deleteAccount)
+router.delete('/:id', deleteAccount)
 
 module.exports = router

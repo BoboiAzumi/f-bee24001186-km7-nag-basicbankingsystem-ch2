@@ -1,8 +1,8 @@
-const { createAccount, getAllAccounts, getAccountById, updateAccount, deleteAccount, deposit, withdraw } = require("../Accounts")
-const { accountsService } = require("../helper/AccountServiceInstance")
-const { usersProfilesService } = require("../helper/UsersProfilesServiceInstance")
+const { createAccount, getAllAccounts, getAccountById, updateAccount, deleteAccount, deposit, withdraw } = require('../Accounts')
+const { accountsService } = require('../helper/AccountServiceInstance')
+const { usersProfilesService } = require('../helper/UsersProfilesServiceInstance')
 
-jest.mock("../helper/AccountServiceInstance", () => ({
+jest.mock('../helper/AccountServiceInstance', () => ({
     accountsService: {
         create: jest.fn(),
         getAllAccounts: jest.fn(),
@@ -13,7 +13,7 @@ jest.mock("../helper/AccountServiceInstance", () => ({
         withdraw: jest.fn()
     }
 }))
-jest.mock("../helper/UsersProfilesServiceInstance", () => ({
+jest.mock('../helper/UsersProfilesServiceInstance', () => ({
     usersProfilesService: {
         create: jest.fn(),
         findBy: jest.fn()
@@ -31,7 +31,7 @@ const req = {
     },
     body: {
         data: {
-            bankName: "BankIndonesia",
+            bankName: 'BankIndonesia',
             amount: 500
         }
     },
@@ -42,19 +42,19 @@ const req = {
 
 const next = jest.fn()
 
-describe("Controller Account.js", () => {
+describe('Controller Account.js', () => {
     afterEach(() => {
         jest.clearAllMocks()
     })
 
-    describe("Create Account", () => {
-        it("Should success create account", async() => {
+    describe('Create Account', () => {
+        it('Should success create account', async() => {
             const userProfiles = [
                 {
                     id: 1,
-                    name: "Zaenal Abidin",
-                    email: "nadiakomalasari@gmail.com",
-                    password: "$2b$04$9o0rDYDbVrrzpnXBupjf6e2D/KIDWC.7m7qrbMTzyEQ3jV8firisW"
+                    name: 'Zaenal Abidin',
+                    email: 'nadiakomalasari@gmail.com',
+                    password: '$2b$04$9o0rDYDbVrrzpnXBupjf6e2D/KIDWC.7m7qrbMTzyEQ3jV8firisW'
                 }
             ]
 
@@ -76,14 +76,14 @@ describe("Controller Account.js", () => {
             expect(res.json).toHaveBeenCalled()
         })
 
-        it("Should error users not found", async() => {
+        it('Should error users not found', async() => {
             let req = {
                 user: {
                     id: 1
                 },
                 body: {
                     data: {
-                        bankName: "BankIndonesia"
+                        bankName: 'BankIndonesia'
                     }
                 }
             }
@@ -98,20 +98,20 @@ describe("Controller Account.js", () => {
         })
     })
 
-    describe("Get all accounts", () => {
-        it("Should return all accounts", async () => {
+    describe('Get all accounts', () => {
+        it('Should return all accounts', async () => {
             const bankAccounts = [
                 {
                     id: 49,
                     userId: 39,
-                    bankName: "BANK ASIA",
+                    bankName: 'BANK ASIA',
                     bankAccountNumber: 49,
                     balance: 5000
                 },
                 {
                     id: 50,
                     userId: 39,
-                    bankName: "BANK INDONESIA",
+                    bankName: 'BANK INDONESIA',
                     bankAccountNumber: 50,
                     balance: 15000
                 },
@@ -122,12 +122,12 @@ describe("Controller Account.js", () => {
             await getAllAccounts(req, res, next)
 
             expect(res.json).toHaveBeenCalledWith({
-                status: "OK",
+                status: 'OK',
                 data: bankAccounts
             })
         })
 
-        it("Should throw error to middleware error handling", async () => {
+        it('Should throw error to middleware error handling', async () => {
             accountsService.getAccountBy.mockImplementation(() => {
                 throw new Error()
             })
@@ -138,13 +138,13 @@ describe("Controller Account.js", () => {
         })
     })
 
-    describe("Get accounts by id", () => {
-        it("Should return all accounts", async () => {
+    describe('Get accounts by id', () => {
+        it('Should return all accounts', async () => {
             const bankAccounts = [
                 {
                     id: 1,
                     userId: 39,
-                    bankName: "BANK ASIA",
+                    bankName: 'BANK ASIA',
                     bankAccountNumber: 49,
                     balance: 5000
                 }
@@ -155,12 +155,12 @@ describe("Controller Account.js", () => {
             await getAccountById(req, res, next)
 
             expect(res.json).toHaveBeenCalledWith({
-                status: "OK",
+                status: 'OK',
                 data: bankAccounts[0]
             })
         })
 
-        it("Should return {} if account not found", async () => {
+        it('Should return {} if account not found', async () => {
             const bankAccounts = []
 
             accountsService.getAccountBy.mockReturnValue(bankAccounts)
@@ -168,12 +168,12 @@ describe("Controller Account.js", () => {
             await getAccountById(req, res, next)
 
             expect(res.json).toHaveBeenCalledWith({
-                status: "OK",
+                status: 'OK',
                 data: {}
             })
         })
 
-        it("Should throw error to middleware error handling", async () => {
+        it('Should throw error to middleware error handling', async () => {
             accountsService.getAccountBy.mockImplementation(() => {
                 throw new Error()
             })
@@ -184,13 +184,13 @@ describe("Controller Account.js", () => {
         })
     })
 
-    describe("Update account", () => {
-        it("Should update account", async () => {
+    describe('Update account', () => {
+        it('Should update account', async () => {
             await updateAccount(req, res, next)
 
             expect(res.json).toHaveBeenCalled()
         })
-        it("Should update error", async () => {
+        it('Should update error', async () => {
             accountsService.updateAccount.mockImplementation(() => {
                 throw new Error()
             })
@@ -201,14 +201,14 @@ describe("Controller Account.js", () => {
         })
     })
 
-    describe("Delete account", () => {
-        it("Should delete account", async () => {
+    describe('Delete account', () => {
+        it('Should delete account', async () => {
             await deleteAccount(req, res, next)
 
             expect(res.json).toHaveBeenCalled()
         })
 
-        it("Should update error", async () => {
+        it('Should update error', async () => {
             accountsService.deleteBankAccount.mockImplementation(() => {
                 throw new Error()
             })
@@ -219,14 +219,14 @@ describe("Controller Account.js", () => {
         })
     })
 
-    describe("Deposit", () => {
-        it("Should deposit", async () => {
+    describe('Deposit', () => {
+        it('Should deposit', async () => {
             await deposit(req, res, next)
 
             expect(res.json).toHaveBeenCalled()
         })
 
-        it("Should deposit error", async () => {
+        it('Should deposit error', async () => {
             accountsService.deposit.mockImplementation(() => {
                 throw new Error()
             })
@@ -237,14 +237,14 @@ describe("Controller Account.js", () => {
         })
     })
 
-    describe("Withdraw", () => {
-        it("Should withdraw", async () => {
+    describe('Withdraw', () => {
+        it('Should withdraw', async () => {
             await withdraw(req, res, next)
 
             expect(res.json).toHaveBeenCalled()
         })
 
-        it("Should deposit error", async () => {
+        it('Should deposit error', async () => {
             accountsService.withdraw.mockImplementation(() => {
                 throw new Error()
             })

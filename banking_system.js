@@ -1,6 +1,6 @@
-const readlineSync = require("readline-sync")
-const BankAccount = require("./bank_account.js")
-const Human = require("./human.js")
+const readlineSync = require('readline-sync')
+const BankAccount = require('./bank_account.js')
+const Human = require('./human.js')
 
 // Helper polymorphism
 const Banking = HumanClass => class extends HumanClass{
@@ -53,8 +53,8 @@ class BankingSystem{
 
     // Simulasi insert database, sekaligus simulasi database account (implementasi protected encapsulation)
     _createDummyAccount(){
-        this.account.push(new UserBank("Naufal Azmi G", "12345", "1234"))
-        this.account.push(new UserBank("Shinomiya Azumi", "54321", "1234"))
+        this.account.push(new UserBank('Naufal Azmi G', '12345', '1234'))
+        this.account.push(new UserBank('Shinomiya Azumi', '54321', '1234'))
     }
 
     // Implementasi private
@@ -71,7 +71,7 @@ class BankingSystem{
                 resolve(false)
             }
             catch{
-                reject("Error: Kesalahan sistem")
+                reject('Error: Kesalahan sistem')
             }
         })
     }
@@ -81,8 +81,8 @@ class BankingSystem{
             const auth = await this.#auth(credential)
             if(!auth){
                 return {
-                    status: "FAILED",
-                    message: "Error: Kesalahan Kredensial"
+                    status: 'FAILED',
+                    message: 'Error: Kesalahan Kredensial'
                 }
             }
 
@@ -95,7 +95,7 @@ class BankingSystem{
                         resolve(true)
                     }
                     catch{
-                        reject(new Error("Kegagalan Sistem"))
+                        reject(new Error('Kegagalan Sistem'))
                     }
                 }, 1000)
             })
@@ -103,12 +103,12 @@ class BankingSystem{
             await depositTransaction
 
             return {
-                status: "SUCCESS"
+                status: 'SUCCESS'
             }
         }
         catch(error){
             return {
-                status: "FAILED",
+                status: 'FAILED',
                 message: error.message
             }
         }
@@ -119,8 +119,8 @@ class BankingSystem{
             const auth = await this.#auth(credential)
             if(!auth){
                 return {
-                    status: "FAILED",
-                    message: "Error: Kesalahan Kredensial"
+                    status: 'FAILED',
+                    message: 'Error: Kesalahan Kredensial'
                 }
             }
 
@@ -135,11 +135,11 @@ class BankingSystem{
                             resolve(true)
                         }
                         else{
-                            reject(new Error("Saldo tidak mencukupi"))
+                            reject(new Error('Saldo tidak mencukupi'))
                         }
                     }
                     catch{
-                        reject(new Error("Kegagalan Sistem"))
+                        reject(new Error('Kegagalan Sistem'))
                     }
                 }, 1000)
             })
@@ -147,12 +147,12 @@ class BankingSystem{
             await withdrawTransaction
             
             return {
-                status: "SUCCESS"
+                status: 'SUCCESS'
             }
         }
         catch(error){
             return {
-                status: "FAILED",
+                status: 'FAILED',
                 message: error.message
             }
         }
@@ -163,8 +163,8 @@ class BankingSystem{
             const auth = await this.#auth(credential)
             if(!auth){
                 return {
-                    status: "FAILED",
-                    message: "Error: Kesalahan Kredensial"
+                    status: 'FAILED',
+                    message: 'Error: Kesalahan Kredensial'
                 }
             }
 
@@ -178,20 +178,20 @@ class BankingSystem{
                         resolve(saldo)
                     }
                     catch{
-                        reject(new Error("Kegagalan Sistem"))
+                        reject(new Error('Kegagalan Sistem'))
                     }
                 }, 1000)
             })
             const saldo = await cekSaldo
             
             return {
-                status: "SUCCESS",
+                status: 'SUCCESS',
                 saldo
             }
         }
         catch(error){
             return {
-                status: "FAILED",
+                status: 'FAILED',
                 message: error.message
             }
         }
@@ -202,21 +202,21 @@ class BankingSystem{
             const auth = await this.#auth(credential)
             if(!auth){
                 return {
-                    status: "FAILED",
-                    message: "Error: Kesalahan Kredensial"
+                    status: 'FAILED',
+                    message: 'Error: Kesalahan Kredensial'
                 }
             }
 
             const account = this.account.find((v) => v.getRekening() == auth.rekening)
             
             return {
-                status: "SUCCESS",
+                status: 'SUCCESS',
                 nama: account.getNama()
             }
         }
         catch(error){
             return {
-                status: "FAILED",
+                status: 'FAILED',
                 message: error.message
             }
         }
@@ -238,12 +238,12 @@ class BankingSystem{
             const account = await cekAkun
             if(!account){
                 return {
-                    status: "FAILED",
-                    message: "Rekening atau pin anda salah"
+                    status: 'FAILED',
+                    message: 'Rekening atau pin anda salah'
                 }
             }
 
-            const cred = new Date().getMilliseconds() + "PIN" + new Date().getTime()
+            const cred = new Date().getMilliseconds() + 'PIN' + new Date().getTime()
 
             this.credential.push({
                 cred,
@@ -251,49 +251,49 @@ class BankingSystem{
             })
 
             return {
-                status: "SUCCESS",
+                status: 'SUCCESS',
                 cred
             }
          }
         catch{
             return {
-                status: "ERROR",
-                message: "Error: Kesalahan Sistem",
+                status: 'ERROR',
+                message: 'Error: Kesalahan Sistem',
             };
         }
     }
 }
 
-const bankingSystem = new BankingSystem("Azumi")
+const bankingSystem = new BankingSystem('Azumi')
 
 function prompt(selector){
     switch(selector){
         case 1:
-            console.log("Pilih Menu : ")
-            console.log("1. Sign in")
-            console.log("2. Shutdown")
+            console.log('Pilih Menu : ')
+            console.log('1. Sign in')
+            console.log('2. Shutdown')
             break
         case 2:
-            console.log("Pilih Mode : ")
-            console.log("1. Cek Saldo")
-            console.log("2. Deposit")
-            console.log("3. Withdraw")
-            console.log("4. Sign Out")
+            console.log('Pilih Mode : ')
+            console.log('1. Cek Saldo')
+            console.log('2. Deposit')
+            console.log('3. Withdraw')
+            console.log('4. Sign Out')
             break
         case 3:
-            console.log("\n")
+            console.log('\n')
             break
         case 4:
-            console.log("BYE BYE !")
+            console.log('BYE BYE !')
             break
         case 5:
-            console.log("Input tidak valid")
+            console.log('Input tidak valid')
             break
         case 6:
-            console.log("=========================================")
+            console.log('=========================================')
             break
         case 7:
-            console.log("Loading ...")
+            console.log('Loading ...')
             break
     }
 }
@@ -304,24 +304,24 @@ async function main(){
         let session = null
         prompt(6)
         prompt(1)
-        const input_1 = parseInt(readlineSync.question("=> "))
+        const input_1 = parseInt(readlineSync.question('=> '))
         
         switch(input_1){
             case 1:
                 prompt(6)
-                const rekening = readlineSync.question("Masukkan no rekening => ")
-                const pin = readlineSync.question("Masukkan pin => ")
+                const rekening = readlineSync.question('Masukkan no rekening => ')
+                const pin = readlineSync.question('Masukkan pin => ')
                 prompt(7)
                 const cred = await bankingSystem.doSign(rekening, pin)
                 switch (cred.status) {
-                    case "SUCCESS":
+                    case 'SUCCESS':
                         session = cred.cred;
                         break;
-                    case "FAILED":
+                    case 'FAILED':
                         prompt(6)
                         console.log(cred.message);
                         break
-                    case "ERROR":
+                    case 'ERROR':
                         prompt(6)
                         console.log(cred.message);
                         break
@@ -340,11 +340,11 @@ async function main(){
         while(session != null){
             prompt(6)
             const namaObj = await bankingSystem.getNama(session)
-            const nama = namaObj.status != "FAILED" ? namaObj.nama : namaObj.message
+            const nama = namaObj.status != 'FAILED' ? namaObj.nama : namaObj.message
             console.log(`Halo ${nama}, Selamat datang di bank ${bankingSystem.bank_name}`)
             prompt(6)
             prompt(2)
-            const input_2 = parseInt(readlineSync.question("=> "))
+            const input_2 = parseInt(readlineSync.question('=> '))
             let ammount = 0
             
             switch(input_2){
@@ -352,43 +352,43 @@ async function main(){
                     prompt(7)
                     prompt(6)
                     const saldo = await bankingSystem.doCekSaldo(session)
-                    if(saldo.status === "FAILED"){
+                    if(saldo.status === 'FAILED'){
                         console.log(saldo.message)
-                        readlineSync.question("[Tekan Enter]=> ")
+                        readlineSync.question('[Tekan Enter]=> ')
                         break
                     }
                     console.log(`Saldo anda : ${saldo.saldo}`)
-                    readlineSync.question("[Tekan Enter]=> ")
+                    readlineSync.question('[Tekan Enter]=> ')
                     break
                 case 2:
                     prompt(6)
-                    ammount = parseInt(readlineSync.question("Ammount => "))
+                    ammount = parseInt(readlineSync.question('Ammount => '))
                     prompt(7)
                     const deposit = await bankingSystem.doDeposit(session, ammount)
 
-                    if(deposit.status === "FAILED"){
+                    if(deposit.status === 'FAILED'){
                         console.log(deposit.message)
-                        readlineSync.question("[Tekan Enter]=> ")
+                        readlineSync.question('[Tekan Enter]=> ')
                         break
                     }
                     
-                    console.log("Berhasil Deposit")
-                    readlineSync.question("[Tekan Enter]=> ")
+                    console.log('Berhasil Deposit')
+                    readlineSync.question('[Tekan Enter]=> ')
                     break
                 case 3:
                     prompt(6)
-                    ammount = parseInt(readlineSync.question("Ammount => "))
+                    ammount = parseInt(readlineSync.question('Ammount => '))
                     prompt(7)
                     const withdraw = await bankingSystem.doWithdraw(session, ammount)
 
-                    if(withdraw.status === "FAILED"){
+                    if(withdraw.status === 'FAILED'){
                         console.log(withdraw.message)
-                        readlineSync.question("[Tekan Enter]=> ")
+                        readlineSync.question('[Tekan Enter]=> ')
                         break
                     }
                     
-                    console.log("Berhasil Withdraw")
-                    readlineSync.question("[Tekan Enter]=> ")
+                    console.log('Berhasil Withdraw')
+                    readlineSync.question('[Tekan Enter]=> ')
                     break
                 case 4:
                     prompt(6)
