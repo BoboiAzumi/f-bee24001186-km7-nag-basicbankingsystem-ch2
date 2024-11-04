@@ -16,6 +16,8 @@ jobs:
         - run: npm install
         - run: npm run test
 
+        - uses: ./lint.yaml
+
         - name: Upload result to codecov
           uses: codecov/codecov-action@v4
           with:
