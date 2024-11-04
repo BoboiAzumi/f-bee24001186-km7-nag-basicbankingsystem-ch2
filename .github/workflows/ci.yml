@@ -4,9 +4,13 @@ on:
     branches: ["main"]
 
 jobs: 
+    lint:
+      uses: ./.github/workflows/lint.yaml
+      
     build:
       name: "Test"
       runs-on: ubuntu-latest
+      needs: [lint]
       steps:
         - uses: actions/checkout@v4
         - uses: actions/setup-node@v4
@@ -15,9 +19,7 @@ jobs:
             
         - run: npm install
         - run: npm run test
-
-        - uses: ./lint.yaml
-
+        
         - name: Upload result to codecov
           uses: codecov/codecov-action@v4
           with:
