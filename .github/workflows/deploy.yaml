@@ -13,7 +13,7 @@ jobs:
         with:
           host: ${{secrets.HOST}}
           port: ${{secrets.PORT}}
-          user: ${{secrets.USER}}
+          username: ${{secrets.USER}}
           key: ${{secrets.KEY}}
           script: |
             cd /home/naufal2404ginting/
