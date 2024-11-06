@@ -1,0 +1,25 @@
+name: Deployment
+on: 
+  push: 
+    branches: ["main"]
+
+jobs: 
+  deploy:
+    name: Deploy to GCP
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: appleboy/ssh-actions@master
+        with:
+          host: ${{secrets.HOST}}
+          port: ${{secrets.PORT}}
+          user: ${{secrets.USER}}
+          key: ${{secrets.KEY}}
+          script: |
+            cd /home/naufal2404ginting/
+            cd deployment
+            cd f-bee24001186-km7-nag-basicbankingsystem-ch2
+            git pull
+            npm install
+            npx prisma migrate dev --name init
+            npx pm2 restart BasicBankingSystem
