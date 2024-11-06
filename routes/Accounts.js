@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { createAccount, getAllAccounts, getAccountById, updateAccount, deleteAccount, withdraw, deposit } = require('../handler/accounts');
+const { createAccount, getAllAccounts, getAccountById, updateAccount, deleteAccount, withdraw, deposit } = require('../handler/Accounts');
 const router = Router();
 
 /*******************************************************
