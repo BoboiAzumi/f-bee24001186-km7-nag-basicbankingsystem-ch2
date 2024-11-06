@@ -1,10 +1,10 @@
-const { Router } = require("express");
-const { getAllUsers, newUser, getUserById, updateUser, updateProfile, deleteUserProfile } = require("../handler/UsersProfiles");
+const { Router } = require('express');
+const { getAllUsers, newUser, getUserById, updateUser, updateProfile, deleteUserProfile } = require('../handler/UsersProfiles');
 
 const router = Router();
 
-router.get("/", getAllUsers);
-router.get("/:id", getUserById)
+router.get('/', getAllUsers);
+router.get('/:id', getUserById)
 
 /*******************************************************
     JSON REQUEST FORMAT  (New User)
@@ -23,7 +23,7 @@ router.get("/:id", getUserById)
         }
     }
 ******************************************************/
-router.post("/", newUser);
+router.post('/', newUser);
 
 
 /*******************************************************
@@ -38,7 +38,7 @@ router.post("/", newUser);
         }
     }
 ******************************************************/
-router.patch("/:id", updateUser)
+router.patch('/:id', updateUser)
 
 /*******************************************************
     JSON REQUEST FORMAT  (Update Profile)
@@ -52,8 +52,8 @@ router.patch("/:id", updateUser)
         }
     }
 ******************************************************/
-router.patch("/:id/profile", updateProfile)
+router.patch('/:id/profile', updateProfile)
 
-router.delete("/:id", deleteUserProfile)
+router.delete('/:id', deleteUserProfile)
 
 module.exports = router;

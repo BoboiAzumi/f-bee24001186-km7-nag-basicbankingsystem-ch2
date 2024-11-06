@@ -1,5 +1,5 @@
-const { accountsService } = require("./helper/AccountServiceInstance")
-const { usersProfilesService } = require("./helper/UsersProfilesServiceInstance")
+const { accountsService } = require('./helper/AccountServiceInstance')
+const { usersProfilesService } = require('./helper/UsersProfilesServiceInstance')
 
 async function createAccount(req, res, next){
     try{
@@ -12,7 +12,7 @@ async function createAccount(req, res, next){
         })
         res.status(201)
         res.json({
-            status: "OK"
+            status: 'OK'
         })
     }
     catch(e) {
@@ -24,7 +24,7 @@ async function getAllAccounts(req, res, next){
     try{
         const findAccounts = await accountsService.getAccountBy({userId: req.user.id})
         res.json({
-            status: "OK",
+            status: 'OK',
             data: findAccounts
         })
     }
@@ -37,7 +37,7 @@ async function getAccountById(req, res, next){
     try{
         const findAccounts = await accountsService.getAccountBy({id: parseInt(req.params.id), userId: req.user.id})
         res.json({
-            status: "OK",
+            status: 'OK',
             data: findAccounts[0] ? findAccounts[0] : {}
         })
     }
@@ -51,7 +51,7 @@ async function updateAccount(req, res, next){
     try{
         await accountsService.updateAccount({id: id, userId: req.user.id}, req.body.data)
         res.json({
-            status: "OK"
+            status: 'OK'
         })
     }
     catch(e) {
@@ -64,7 +64,7 @@ async function deleteAccount(req, res, next){
     try{
         await accountsService.deleteBankAccount(id, req.user.id)
         res.json({
-            status: "OK"
+            status: 'OK'
         })
     }
     catch(e) {
@@ -77,7 +77,7 @@ async function deposit(req, res, next){
     try{
         await accountsService.deposit(id, req.body.data.amount, req.user.id)
         res.json({
-            status: "OK"
+            status: 'OK'
         })
     }
     catch(e) {
@@ -90,7 +90,7 @@ async function withdraw(req, res, next){
     try{
         await accountsService.withdraw(id, req.body.data.amount, req.user.id)
         res.json({
-            status: "OK"
+            status: 'OK'
         })
     }
     catch(e) {

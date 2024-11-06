@@ -1,4 +1,4 @@
-const { Auth } = require("./helper/Authentication")
+const { Auth } = require('./helper/Authentication')
 
 async function auth(req, res, next){
     try{
@@ -6,7 +6,7 @@ async function auth(req, res, next){
         const token = await Auth.authentication(email, password)
 
         res.json({
-            status: "SUCCESS",
+            status: 'SUCCESS',
             token
         })
     }

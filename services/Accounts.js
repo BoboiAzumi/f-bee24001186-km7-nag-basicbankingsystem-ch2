@@ -1,5 +1,5 @@
-const { prisma } = require("../db/Client")
-const Joi = require("joi")
+const { prisma } = require('../db/Client')
+const Joi = require('joi')
 
 const create_validation = Joi.object({
     userId: Joi.number().required(),
@@ -98,8 +98,8 @@ class AccountsService{
             ])
         }
         catch(e){
-            if(e.name == "PrismaClientKnownRequestError"){
-                throw new Error("Data cannot be found")
+            if(e.name == 'PrismaClientKnownRequestError'){
+                throw new Error('Data cannot be found')
             }
             else{
                 throw e
@@ -121,7 +121,7 @@ class AccountsService{
             const account = await this._tbBankAccounts.findMany({where: {id, userId}})
 
             if(account.length == 0){
-                throw new Error("Account not found")
+                throw new Error('Account not found')
             }
 
             await this._tbBankAccounts.update({where: {id, userId}, data: { balance: account[0].balance + amount}})
@@ -145,7 +145,7 @@ class AccountsService{
             const account = await this._tbBankAccounts.findMany({where: {id, userId}})
 
             if(account.length == 0){
-                throw new Error("Account not found")
+                throw new Error('Account not found')
             }
 
             await this._tbBankAccounts.update({where: {id, userId}, data: { balance: account[0].balance - amount}})

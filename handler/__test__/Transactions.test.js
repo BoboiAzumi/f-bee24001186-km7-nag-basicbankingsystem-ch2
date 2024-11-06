@@ -1,7 +1,7 @@
-const { transactionsService } = require("../helper/TransactionsServiceInstance")
-const { transfer, getAllTransactions, getTransactionsBy } = require("../Transactions")
+const { transactionsService } = require('../helper/TransactionsServiceInstance')
+const { transfer, getAllTransactions, getTransactionsBy } = require('../Transactions')
 
-jest.mock("../helper/TransactionsServiceInstance", () => ({
+jest.mock('../helper/TransactionsServiceInstance', () => ({
     transactionsService: {
         transfer: jest.fn(),
         getAllTransactions: jest.fn(),
@@ -28,9 +28,9 @@ const req = {
 
 const next = jest.fn()
 
-describe("Controller Transactions.js", () => {
-    describe("Transfer", () => {
-        it("Should transactions success", async() => {
+describe('Controller Transactions.js', () => {
+    describe('Transfer', () => {
+        it('Should transactions success', async() => {
             req.body.data = {
                 sourceBankAccountNumber: 1,
                 destinationBankAccountNumber: 2,
@@ -41,11 +41,11 @@ describe("Controller Transactions.js", () => {
 
             expect(res.status).toHaveBeenCalledWith(201)
             expect(res.json).toHaveBeenCalledWith({
-                status: "OK"
+                status: 'OK'
             })
         })
 
-        it("Should transactions error", async() => {
+        it('Should transactions error', async() => {
             req.body.data = {
                 sourceBankAccountNumber: 1,
                 destinationBankAccountNumber: 2,
@@ -62,8 +62,8 @@ describe("Controller Transactions.js", () => {
         })
     })
 
-    describe("Get all Transaction", () => {
-        it("Should get all transactions", async() => {
+    describe('Get all Transaction', () => {
+        it('Should get all transactions', async() => {
             const log = [
                 {
                     id: 6,
@@ -83,12 +83,12 @@ describe("Controller Transactions.js", () => {
 
             await getAllTransactions(req, res, next)
             expect(res.json).toHaveBeenCalledWith({
-                status: "OK",
+                status: 'OK',
                 data: log
             })
         })
 
-        it("Should get error", async() => {
+        it('Should get error', async() => {
             req.body.data = {
                 sourceBankAccountNumber: 1,
                 destinationBankAccountNumber: 2,
@@ -105,8 +105,8 @@ describe("Controller Transactions.js", () => {
         })
     })
 
-    describe("Get all Transaction specific", () => {
-        it("Should get all transactions", async() => {
+    describe('Get all Transaction specific', () => {
+        it('Should get all transactions', async() => {
             const log = [
                 {
                     id: 6,
@@ -123,12 +123,12 @@ describe("Controller Transactions.js", () => {
                 id: req.params.id
             })
             expect(res.json).toHaveBeenCalledWith({
-                status: "OK",
+                status: 'OK',
                 data: log
             })
         })
 
-        it("Should get error", async() => {
+        it('Should get error', async() => {
             req.body.data = {
                 sourceBankAccountNumber: 1,
                 destinationBankAccountNumber: 2,

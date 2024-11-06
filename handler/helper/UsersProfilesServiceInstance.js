@@ -1,4 +1,4 @@
-const { UsersProfilesService } = require("../../services/UsersProfiles");
+const { UsersProfilesService } = require('../../services/UsersProfiles');
 
 const usersProfilesService = new UsersProfilesService()
 

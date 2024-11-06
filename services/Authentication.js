@@ -1,11 +1,11 @@
-const jwt = require("jsonwebtoken")
-const bcrypt = require("bcrypt")
-const { UsersProfilesService } = require("./UsersProfiles")
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
+const { UsersProfilesService } = require('./UsersProfiles')
 
 class Authentication{
     constructor(){
         this.UsersProfiles = new UsersProfilesService()
-        this.secret = "RAHASIA"
+        this.secret = 'RAHASIA'
     }
 
     async authentication(email, password){
@@ -14,18 +14,18 @@ class Authentication{
         })
 
         if(!find){
-            throw new Error("Email not found")
+            throw new Error('Email not found')
         }
 
         if(!(await bcrypt.compare(password, find.password))){
-            throw new Error("Password is wrong")
+            throw new Error('Password is wrong')
         }
 
         const token = jwt.sign({
             id: find.id
         }, this.secret, {
-            algorithm: "HS256",
-            expiresIn: "24h"
+            algorithm: 'HS256',
+            expiresIn: '24h'
         })
 
         return token

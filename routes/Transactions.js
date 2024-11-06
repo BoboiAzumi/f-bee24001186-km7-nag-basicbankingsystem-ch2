@@ -1,5 +1,5 @@
-const { Router } = require("express")
-const { transfer, getAllTransactions, getTransactionsBy } = require("../handler/Transactions")
+const { Router } = require('express')
+const { transfer, getAllTransactions, getTransactionsBy } = require('../handler/Transactions')
 
 const router = Router()
 
@@ -15,9 +15,9 @@ const router = Router()
         }
     }
 ******************************************************/
-router.post("/", transfer)
+router.post('/', transfer)
 
-router.get("/", getAllTransactions)
-router.get("/:id", getTransactionsBy)
+router.get('/', getAllTransactions)
+router.get('/:id', getTransactionsBy)
 
 module.exports = router

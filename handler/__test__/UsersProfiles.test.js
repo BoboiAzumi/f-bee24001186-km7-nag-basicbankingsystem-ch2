@@ -1,8 +1,8 @@
-const { PrismaClientValidationError } = require("@prisma/client/runtime/library")
-const { usersProfilesService } = require("../helper/UsersProfilesServiceInstance")
-const { getAllUsers, getUserById, newUser, updateUser, updateProfile, deleteUserProfile } = require("../UsersProfiles")
+const { PrismaClientValidationError } = require('@prisma/client/runtime/library')
+const { usersProfilesService } = require('../helper/UsersProfilesServiceInstance')
+const { getAllUsers, getUserById, newUser, updateUser, updateProfile, deleteUserProfile } = require('../UsersProfiles')
 
-jest.mock("../helper/UsersProfilesServiceInstance", () => ({
+jest.mock('../helper/UsersProfilesServiceInstance', () => ({
     usersProfilesService: {
         create: jest.fn(),
         findBy: jest.fn(),
@@ -31,20 +31,20 @@ const req = {
 
 const next = jest.fn()
 
-describe("Controller UsersProfiles.js", () => {
+describe('Controller UsersProfiles.js', () => {
     afterEach(() => {
         jest.clearAllMocks()
     })
 
-    describe("Get All Users Profile", () => {
-        it("Should get all users", async() => {
+    describe('Get All Users Profile', () => {
+        it('Should get all users', async() => {
             await getAllUsers(req, res, next)
 
             expect(usersProfilesService.findAll).toHaveBeenCalled()
             expect(res.json).toHaveBeenCalled()
         })
 
-        it("Should throw error to middleware", async() => {
+        it('Should throw error to middleware', async() => {
             usersProfilesService.findAll.mockImplementation(() => {
                 throw new Error()
             })
@@ -54,14 +54,14 @@ describe("Controller UsersProfiles.js", () => {
         })
     })
 
-    describe("Get user by id", () => {
-        it("Should get user by id", async() => {
+    describe('Get user by id', () => {
+        it('Should get user by id', async() => {
             const userProfiles = [
                 {
                     id: 1,
-                    name: "Zaenal Abidin",
-                    email: "nadiakomalasari@gmail.com",
-                    password: "$2b$04$9o0rDYDbVrrzpnXBupjf6e2D/KIDWC.7m7qrbMTzyEQ3jV8firisW"
+                    name: 'Zaenal Abidin',
+                    email: 'nadiakomalasari@gmail.com',
+                    password: '$2b$04$9o0rDYDbVrrzpnXBupjf6e2D/KIDWC.7m7qrbMTzyEQ3jV8firisW'
                 }
             ]
 
@@ -75,7 +75,7 @@ describe("Controller UsersProfiles.js", () => {
             expect(res.json).toHaveBeenCalled()
         })
 
-        it("Should get user by id but not found", async() => {
+        it('Should get user by id but not found', async() => {
             const userProfiles = []
 
             usersProfilesService.findBy.mockReturnValue(userProfiles)
@@ -86,12 +86,12 @@ describe("Controller UsersProfiles.js", () => {
                 id: req.params.id
             }, true)
             expect(res.json).toHaveBeenCalledWith({
-                status: "OK",
+                status: 'OK',
                 data: {}
             })
         })
 
-        it("Should throw error to middleware", async() => {
+        it('Should throw error to middleware', async() => {
             usersProfilesService.findBy.mockImplementation(() => {
                 throw new Error()
             })
@@ -101,16 +101,16 @@ describe("Controller UsersProfiles.js", () => {
         })
     })
 
-    describe("Create new user", () => {
-        it("Should create new user", async() => {
+    describe('Create new user', () => {
+        it('Should create new user', async() => {
             req.body.data = {
-                name: "Zaenal Abidin",
-                email: "nadiakomalasari@gmail.com",
-                password: "$2b$04$9o0rDYDbVrrzpnXBupjf6e2D/KIDWC.7m7qrbMTzyEQ3jV8firisW",
+                name: 'Zaenal Abidin',
+                email: 'nadiakomalasari@gmail.com',
+                password: '$2b$04$9o0rDYDbVrrzpnXBupjf6e2D/KIDWC.7m7qrbMTzyEQ3jV8firisW',
                 profile: {
-                    identityType: "KTP",
-                    identityNumber: "1023342764323",
-                    address: "Alamat"
+                    identityType: 'KTP',
+                    identityNumber: '1023342764323',
+                    address: 'Alamat'
                 }
             }
 
@@ -122,16 +122,16 @@ describe("Controller UsersProfiles.js", () => {
             expect(res.json).toHaveBeenCalled()
         })
 
-        it("Should throw error to middleware PrismaClientValidationError", async() => {
+        it('Should throw error to middleware PrismaClientValidationError', async() => {
             usersProfilesService.create.mockImplementation(() => {
-                throw new PrismaClientValidationError("Error wak", { clientVersion: "1.1" })
+                throw new PrismaClientValidationError('Error wak', { clientVersion: '1.1' })
             })
             await newUser(req, res, next)
 
             expect(next).toHaveBeenCalled()
         })
 
-        it("Should throw error to middleware", async() => {
+        it('Should throw error to middleware', async() => {
             usersProfilesService.create.mockImplementation(() => {
                 throw new Error()
             })
@@ -141,12 +141,12 @@ describe("Controller UsersProfiles.js", () => {
         })
     })
 
-    describe("Update user", () => {
-        it("Should update user", async() => {
+    describe('Update user', () => {
+        it('Should update user', async() => {
             req.body.data = {
-                name: "Zaenal Abidin",
-                email: "nadiakomalasari@gmail.com",
-                password: "12345678"
+                name: 'Zaenal Abidin',
+                email: 'nadiakomalasari@gmail.com',
+                password: '12345678'
             }
     
             await updateUser(req, res, next)
@@ -156,11 +156,11 @@ describe("Controller UsersProfiles.js", () => {
             }, req.body.data)
 
             expect(res.json).toHaveBeenCalledWith({
-                status: "SUCCESS"
+                status: 'SUCCESS'
             })
         })
 
-        it("Should update user", async() => {
+        it('Should update user', async() => {
             usersProfilesService.updateUser.mockImplementation(() => {
                 throw new Error()
             })
@@ -172,12 +172,12 @@ describe("Controller UsersProfiles.js", () => {
         })
     })
 
-    describe("Update profile", () => {
-        it("Should update profile", async() => {
+    describe('Update profile', () => {
+        it('Should update profile', async() => {
             req.body.data = {
-                identityType: "KTP",
-                identityNumber: "1023342764323",
-                address: "Alamat"
+                identityType: 'KTP',
+                identityNumber: '1023342764323',
+                address: 'Alamat'
             }
     
             await updateProfile(req, res, next)
@@ -185,11 +185,11 @@ describe("Controller UsersProfiles.js", () => {
             expect(usersProfilesService.updateProfile).toHaveBeenCalledWith(req.params.id, req.body.data)
 
             expect(res.json).toHaveBeenCalledWith({
-                status: "SUCCESS"
+                status: 'SUCCESS'
             })
         })
 
-        it("Should update profile", async() => {
+        it('Should update profile', async() => {
             usersProfilesService.updateProfile.mockImplementation(() => {
                 throw new Error()
             })
@@ -199,18 +199,18 @@ describe("Controller UsersProfiles.js", () => {
         })
     })
 
-    describe("Delete profile", () => {
-        it("Should delete profile", async() => {
+    describe('Delete profile', () => {
+        it('Should delete profile', async() => {
             await deleteUserProfile(req, res, next)
 
             expect(usersProfilesService.deleteUserProfile).toHaveBeenCalledWith(req.params.id)
 
             expect(res.json).toHaveBeenCalledWith({
-                status: "SUCCESS"
+                status: 'SUCCESS'
             })
         })
 
-        it("Should update profile", async() => {
+        it('Should update profile', async() => {
             usersProfilesService.deleteUserProfile.mockImplementation(() => {
                 throw new Error()
             })
