@@ -381,6 +381,52 @@
                 }
             }
         },
+        "/api/v1/users/{id}/profile/image": {
+            "parameters": [
+                {
+                    "in": "path",
+                    "name": "id",
+                    "schema": {
+                        "type": "integer"
+                    },
+                    "required": true,
+                    "description": "User id"
+                }
+            ],
+            "post": {
+                "tags": ["users"],
+                "summary": "Update profile image",
+                "description": "Update profile image",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "image/*": {
+                            "schema": {
+                                "type": "string",
+                                "format": "binary"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "OK"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
 		"/api/v1/accounts": {
 			"get": {
 				"description": "Get all bank account",
@@ -891,6 +937,164 @@
                     }
                 }
             }
+        },
+        "/api/v1/uploads": {
+            "summary": "Need authenticate first",
+            "get": {
+                "summary": "Get all uploaded image",
+                "description": "Get all uploaded image",
+                "tags": ["uploads"],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {"type": "string", "example": "OK"},
+                                        "data": {"type": "array", "items": {"type": "object", "properties": {
+                                            "id": {"type": "integer", "example": 1},
+                                            "userId": {"type": "integer", "example": 44},
+                                            "title": {"type": "string", "example": "Nahida"},
+                                            "description": {"type": "string", "example":"Nahida Pictures"},
+                                            "url": {"type":"string","example":"https://ik.imagekit.io/azumidesu/9187d712951e99f926d2a7e018cf171d_a0Y7Z9puP"},
+                                            "fileId": {"type":"string", "example":"672d9259e375273f6021ff48"}
+                                        }}}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Upload an image",
+                "description": "Upload an image",
+                "tags": ["uploads"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {"type": "string", "example": "Pemandangan Indah"},
+                                    "description": {"type": "string", "example": "Pemandangan di isekai tahun 2030"},
+                                    "img": {"type": "string", "format": "binary"}
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {"type": "string", "example": "OK"}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/uploads/{id}": {
+            "parameters": [
+                {
+                    "in": "path",
+                    "name": "id",
+                    "schema": {
+                        "type": "integer"
+                    },
+                    "required": true,
+                    "description": "Upload id"
+                }
+            ],
+            "get": {
+                "summary": "Get uploaded detail",
+                "tags": ["uploads"],
+                "description": "Get a detail",
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json":{
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {"type": "string", "example": "OK"},
+                                        "data": {"type": "object", "properties": {
+                                            "id": {"type": "integer", "example": 1},
+                                            "userId": {"type": "integer", "example": 44},
+                                            "title": {"type": "string", "example": "Nahida"},
+                                            "description": {"type": "string", "example":"Nahida Pictures"},
+                                            "url": {"type":"string","example":"https://ik.imagekit.io/azumidesu/9187d712951e99f926d2a7e018cf171d_a0Y7Z9puP"},
+                                            "fileId": {"type":"string", "example":"672d9259e375273f6021ff48"}
+                                        }}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "summary": "Edit image information",
+                "description": "Edit image information",
+                "tags": ["uploads"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "data": {"type": "object", "properties": {
+                                        "title": {"type": "string", "example": "Pemandangan Indah"},
+                                        "description": {"type": "string", "example": "Pemandangan di isekai tahun 2030"}
+                                    }}
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {"type": "string", "example": "OK"}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete image",
+                "description": "Delete image",
+                "tags": ["uploads"],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {"type": "string", "example": "OK"}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -909,6 +1113,14 @@
         {
             "name": "users",
             "description": "The Users managing API"
+        },
+        {
+            "name": "uploads",
+            "description": "Upload image - Need authenticate first"
+        },
+        {
+            "name": "authenticate",
+            "description": "Authenticate JWT"
         }
     ]
 }

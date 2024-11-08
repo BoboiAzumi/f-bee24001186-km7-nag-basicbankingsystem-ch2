@@ -1,11 +1,14 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const { UsersProfilesService } = require('./UsersProfiles')
+const dotenv = require('dotenv')
+
+dotenv.config()
 
 class Authentication{
     constructor(){
         this.UsersProfiles = new UsersProfilesService()
-        this.secret = 'RAHASIA'
+        this.secret = process.env.JWT_SECRET
     }
 
     async authentication(email, password){
