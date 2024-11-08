@@ -17,12 +17,10 @@ jobs:
           username: ${{secrets.USER}}
           key: ${{secrets.KEY}}
           script: |
-            cd ${{secrets.HOMEPATH}}
+            cd /home/naufal2404ginting
             cd deployment
             cd f-bee24001186-km7-nag-basicbankingsystem-ch2
             git pull
             npm install
-            touch .env
-            echo ${{secrets.ENV}} >> .env
-            npx prisma migrate dev --name init
+            npx prisma migrate deploy
             npx pm2 restart BasicBankingSystem
