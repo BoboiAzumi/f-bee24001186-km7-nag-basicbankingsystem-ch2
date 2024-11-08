@@ -16,7 +16,7 @@ jobs:
           username: ${{secrets.USER}}
           key: ${{secrets.KEY}}
           script: |
-            cd /home/naufal2404ginting/
+            cd ${{secrets.HOMEPATH}}
             cd deployment
             cd f-bee24001186-km7-nag-basicbankingsystem-ch2
             git pull
