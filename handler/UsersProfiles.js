@@ -1,4 +1,6 @@
+const { imageKitService } = require('./helper/ImageKitServiceInstance')
 const { usersProfilesService } = require('./helper/UsersProfilesServiceInstance')
+const fs = require('fs')
 
 async function getAllUsers(req, res, next){
     try{
@@ -80,11 +82,36 @@ async function deleteUserProfile(req, res, next){
     }
 }
 
+async function uploadImage(req, res, next){
+    try{
+        const user = await usersProfilesService.findFirst({id: parseInt(req.params.id)}, true)
+        if(user.profile[0].imageFileId){
+            imageKitService.deleteImage(user.profile[0].imageFileId)
+        }
+
+        const result = await imageKitService.uploadFileOnly(req.file.path, req.file.filename)
+
+        await usersProfilesService.updateImage(user.id, {
+            imageUrl: result.url,
+            imageFileId: result.fileId
+        })
+
+        fs.unlinkSync(req.file.path)
+        res.json({
+            status: 'OK'
+        })
+    }
+    catch(e){
+        next(e)
+    }
+}
+
 module.exports = {
     getAllUsers,
     getUserById,
     newUser,
     updateUser,
     updateProfile,
-    deleteUserProfile
+    deleteUserProfile,
+    uploadImage
 }

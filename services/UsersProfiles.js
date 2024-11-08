@@ -144,6 +144,20 @@ class UsersProfilesService {
         }
     }
 
+    async updateImage(userId, data){
+        try{
+            await prisma.$transaction([
+                this._tbProfile.update({
+                    where: {userId},
+                    data
+                })
+            ])
+        }
+        catch(e){
+            throw e
+        }
+    }
+
     async deleteUserProfile(userId){
         try{
             const validation = identifier.validate({id: userId})

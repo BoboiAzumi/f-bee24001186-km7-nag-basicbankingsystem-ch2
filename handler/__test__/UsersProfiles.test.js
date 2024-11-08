@@ -1,6 +1,8 @@
 const { PrismaClientValidationError } = require('@prisma/client/runtime/library')
 const { usersProfilesService } = require('../helper/UsersProfilesServiceInstance')
-const { getAllUsers, getUserById, newUser, updateUser, updateProfile, deleteUserProfile } = require('../UsersProfiles')
+const { getAllUsers, getUserById, newUser, updateUser, updateProfile, deleteUserProfile, uploadImage } = require('../UsersProfiles')
+const { imageKitService } = require('../helper/ImageKitServiceInstance')
+const fs = require('fs')
 
 jest.mock('../helper/UsersProfilesServiceInstance', () => ({
     usersProfilesService: {
@@ -10,8 +12,20 @@ jest.mock('../helper/UsersProfilesServiceInstance', () => ({
         findFirst: jest.fn(),
         updateUser: jest.fn(),
         updateProfile: jest.fn(),
-        deleteUserProfile: jest.fn()
+        deleteUserProfile: jest.fn(),
+        updateImage: jest.fn()
     }
+}))
+
+jest.mock('../helper/ImageKitServiceInstance', () => ({
+    imageKitService:{
+        deleteImage: jest.fn(),
+        uploadFileOnly: jest.fn()
+    }
+}))
+
+jest.mock('fs', () => ({
+    unlinkSync: jest.fn()
 }))
 
 const res = {
@@ -215,6 +229,53 @@ describe('Controller UsersProfiles.js', () => {
                 throw new Error()
             })
             await deleteUserProfile(req, res, next)
+
+            expect(next).toHaveBeenCalled()
+        })
+    })
+
+    describe('Upload profile image', () => {
+        it('Should upload profile image', async() => {
+            req.file = {
+                path: 'upload/gambar.png',
+                filename: 'Nakano Itsuki.png'
+            }
+
+            const uploaded = {
+                url: 'https://blablabla/aabbccdd.png',
+                fileId: 'aabbccdd'
+            }
+            
+            usersProfilesService.findFirst.mockReturnValueOnce({
+                id: req.params.id,
+                profile: [
+                    {
+                        imageFileId: 'aabbccdd'
+                    }
+                ]
+            })
+
+            imageKitService.uploadFileOnly.mockReturnValueOnce(uploaded)
+
+            await uploadImage(req, res, next)
+
+            expect(imageKitService.uploadFileOnly).toHaveBeenCalledWith(req.file.path, req.file.filename)
+            expect(usersProfilesService.updateImage).toHaveBeenCalledWith(req.params.id, {
+                imageUrl: uploaded.url,
+                imageFileId: uploaded.fileId
+            })
+            expect(fs.unlinkSync).toHaveBeenCalled()
+            expect(res.json).toHaveBeenCalledWith({
+                status: 'OK'
+            })
+        })
+
+        it('Should Error', async() => {
+            usersProfilesService.findFirst.mockImplementation(() => {
+                throw new Error()
+            })
+            
+            await uploadImage(req, res, next)
 
             expect(next).toHaveBeenCalled()
         })

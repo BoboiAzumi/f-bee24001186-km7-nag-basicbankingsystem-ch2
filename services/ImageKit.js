@@ -1,16 +1,20 @@
-const ImageKit = require('imagekit')
 const fs = require('fs')
+const { prisma } = require('../db/Client')
+const joi = require('joi')
+const { imageKit } = require('./helper/ImageKitInstance')
+
+const validation = joi.object({
+    title: joi.string().min(1),
+    description: joi.string().min(1)
+})
+
 
 class ImageKitService{
     constructor(){
-        this.imageKit = new ImageKit({
-            publicKey: 'public_te4UYUpNlow9zYDPpuA9bsNCVbo=',
-            privateKey: 'private_hA4yUAElcWe9uH1oDWlCLjXKjDI=',
-            urlEndpoint: 'https://ik.imagekit.io/azumidesu/'
-        })
+        this.imageKit = imageKit
     }
 
-    async upload(path, name){
+    async upload(path, name, info){
         try{
             const file = fs.readFileSync(path)
             const res = await this.imageKit.upload({
@@ -18,24 +22,99 @@ class ImageKitService{
                 fileName: name
             })
 
-            console.log(res)
+            await prisma.image.create({
+                data: {
+                    userId: info.id,
+                    title: info.title,
+                    description: info.description,
+                    url: res.url,
+                    fileId: res.fileId
+                }
+            })
         }
         catch (err){
-            console.log(err)
+            throw new Error(err.message)
         }
     }
 
-    async uploadFromBuffer(buffer, name){
+    async uploadFileOnly(path, name){
         try{
+            const file = fs.readFileSync(path)
             const res = await this.imageKit.upload({
-                file: buffer,
+                file: file,
                 fileName: name
             })
 
-            console.log(res)
+            return res
         }
         catch (err){
-            console.log(err)
+            throw new Error(err.message)
+        }
+    }
+
+    async getAllImage(){
+        try{
+            const result = await prisma.image.findMany()
+            return result
+        }
+        catch (err){
+            throw new Error(err.message)
+        }
+    }
+
+    async getImageBy(by){
+        try{
+            const result = await prisma.image.findUnique({
+                where: by
+            })
+            return result
+        }
+        catch (err){
+            throw new Error(err.message)
+        }
+    }
+
+    async updateImageDetail(by, data){
+        try{
+            const valid = validation.validate(data)
+            if(valid.error) throw new Error(valid.error)
+            await prisma.image.update({
+                where: by,
+                data
+            })
+        }
+        catch (err){
+            throw new Error(err.message)
+        }
+    }
+    
+    async imageDeleteByImageId(id){
+        try{
+            const image = await prisma.image.findUnique({
+                where: {
+                    id
+                }
+            })
+
+            await this.imageKit.deleteFile(image.fileId)
+
+            await prisma.image.delete({
+                where: {
+                    id
+                }
+            })
+        }
+        catch (err){
+            throw new Error(err.message)
+        }
+    }
+
+    async deleteImage(fileId){
+        try{
+            await this.imageKit.deleteFile(fileId)
+        }
+        catch (err){
+            throw new Error(err.message)
         }
     }
 }

@@ -20,6 +20,7 @@ model User {
   password    String        @default("") @db.VarChar(128)
   bankAccount BankAccount[]
   profile     Profile[]
+  Image       Image[]
 
   @@map("users")
 }
@@ -44,6 +45,8 @@ model Profile {
   identityNumber String @map("identity_number")
   address        String
   user           User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  imageUrl       String @map("image_url") @default("")
+  imageFileId    String @map("image_file_id") @default("")
 
   @@map("profiles")
 }
@@ -57,4 +60,16 @@ model Transaction {
   destination          BankAccount @relation(fields: [destinationAccountId], references: [id], name: "destination", onDelete: SetNull)
 
   @@map("transactions")
+}
+
+model Image {
+  id          Int    @id @default(autoincrement())
+  userId      Int    @map("user_id")
+  user        User   @relation(fields: [userId], references: [id])
+  title       String @default("")
+  description String @default("")
+  url         String @default("")
+  fileId      String @default("")
+
+  @@map("images")
 }

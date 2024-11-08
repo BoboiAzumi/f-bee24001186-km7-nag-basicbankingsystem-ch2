@@ -1,5 +1,7 @@
 const { Router } = require('express');
-const { getAllUsers, newUser, getUserById, updateUser, updateProfile, deleteUserProfile } = require('../handler/UsersProfiles');
+const { getAllUsers, newUser, getUserById, updateUser, updateProfile, deleteUserProfile, uploadImage } = require('../handler/UsersProfiles');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
 const router = Router();
 
@@ -55,5 +57,7 @@ router.patch('/:id', updateUser)
 router.patch('/:id/profile', updateProfile)
 
 router.delete('/:id', deleteUserProfile)
+
+router.post('/:id/profile/image', upload.single('img'), uploadImage)
 
 module.exports = router;
