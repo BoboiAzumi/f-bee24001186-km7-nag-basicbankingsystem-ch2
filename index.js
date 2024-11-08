@@ -8,13 +8,19 @@ const { Authenticate } = require('./routes/Authenticate');
 const { Authorization } = require('./middleware/Authorization');
 const { newUser } = require('./handler/UsersProfiles');
 const { ImageUpload } = require('./routes/ImageUpload');
+const dotenv = require('dotenv')
+
+dotenv.config()
 
 const app = express();
 
 const swaggerJson = fs.readFileSync('./swagger.json');
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(JSON.parse(swaggerJson)));
+app.all('/', (req, res) => {
+  res.redirect('/api-docs')
+})
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(JSON.parse(swaggerJson)));
 app.use(express.json());
 app.use('/api/v1/users', UsersProfilesRouter);
 app.use('/api/v1/accounts', Authorization, AccountsRouter);
@@ -45,5 +51,6 @@ app.all('*', (req, res) => {
   })
 })
 
+const PORT = process.env.PORT || 3000
 
-app.listen(3000, () => console.log('Start on 3000'));
+app.listen(PORT, '0.0.0.0',() => console.log(`Start on ${PORT}`));

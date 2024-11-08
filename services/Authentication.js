@@ -33,7 +33,7 @@ class Authentication{
 
         return token
     }
-
+    
     async validation(token){
         if(!token){
             return false
