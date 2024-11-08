@@ -1,7 +1,22 @@
 const { Router } = require('express');
 const { getAllUsers, newUser, getUserById, updateUser, updateProfile, deleteUserProfile, uploadImage } = require('../handler/UsersProfiles');
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+const storage = multer.memoryStorage()
+const upload = multer({ 
+    storage,
+    limits: {
+        fileSize: 1024 * 1024 * 10
+    }
+}).single('img');
+
+async function middleware(req, res, next){
+    upload(req, res, (err) => {
+        if(err) {
+            return next(err)
+        }
+        return next()
+    })
+}
 
 const router = Router();
 
@@ -58,6 +73,6 @@ router.patch('/:id/profile', updateProfile)
 
 router.delete('/:id', deleteUserProfile)
 
-router.post('/:id/profile/image', upload.single('img'), uploadImage)
+router.post('/:id/profile/image', middleware, uploadImage)
 
 module.exports = router;

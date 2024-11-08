@@ -1,6 +1,6 @@
 const { imageKitService } = require('./helper/ImageKitServiceInstance')
 const { usersProfilesService } = require('./helper/UsersProfilesServiceInstance')
-const fs = require('fs')
+const { randomize } = require('./helper/Randomize')
 
 async function getAllUsers(req, res, next){
     try{
@@ -89,19 +89,22 @@ async function uploadImage(req, res, next){
             imageKitService.deleteImage(user.profile[0].imageFileId)
         }
 
-        const result = await imageKitService.uploadFileOnly(req.file.path, req.file.filename)
+        const extension = req.file.originalname.split('.').pop()
+        const fileName = randomize();
+
+        const result = await imageKitService.uploadFileOnly(req.file.buffer.toString('base64'), `${fileName}.${extension}`)
 
         await usersProfilesService.updateImage(user.id, {
             imageUrl: result.url,
             imageFileId: result.fileId
         })
 
-        fs.unlinkSync(req.file.path)
         res.json({
             status: 'OK'
         })
     }
     catch(e){
+        console.log(e.message)
         next(e)
     }
 }
