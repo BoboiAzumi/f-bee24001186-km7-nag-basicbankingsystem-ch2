@@ -9,17 +9,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: appleboy/ssh-action@master
+      - name: Deploy to GCP Compute Engine
+        uses: appleboy/ssh-action@master
         with:
           host: ${{secrets.HOST}}
           port: ${{secrets.PORT}}
           username: ${{secrets.USER}}
           key: ${{secrets.KEY}}
-          script: |
+          script: 
             cd ${{secrets.HOMEPATH}}
             cd deployment
             cd f-bee24001186-km7-nag-basicbankingsystem-ch2
             git pull
             npm install
+            touch .env
+            echo ${{secrets.ENV}} >> .env
             npx prisma migrate dev --name init
             npx pm2 restart BasicBankingSystem
