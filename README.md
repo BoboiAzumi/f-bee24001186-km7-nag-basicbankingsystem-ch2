@@ -58,3 +58,8 @@ Nama    : Naufal Azmi Ginting
 
 Kelas   : BEJS-1
 </pre>
+
+## Akses
+https://binarkm7.et.r.appspot.com/
+
+http://35.219.74.122/
