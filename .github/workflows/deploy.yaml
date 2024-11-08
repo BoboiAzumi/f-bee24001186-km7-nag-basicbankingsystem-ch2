@@ -16,7 +16,7 @@ jobs:
           port: ${{secrets.PORT}}
           username: ${{secrets.USER}}
           key: ${{secrets.KEY}}
-          script: 
+          script: |
             cd ${{secrets.HOMEPATH}}
             cd deployment
             cd f-bee24001186-km7-nag-basicbankingsystem-ch2
