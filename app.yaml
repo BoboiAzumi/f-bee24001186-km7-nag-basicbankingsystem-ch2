@@ -1,0 +1,14 @@
+runtime: nodejs22
+env: standard
+
+instance_class: F1
+
+runtime_config:
+  operating_system: 'ubuntu22'
+  runtime_version: '20'
+
+#manual_scaling:
+#  instances: 1
+
+includes: 
+  - env.yaml
