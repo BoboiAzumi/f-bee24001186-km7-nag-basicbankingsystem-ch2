@@ -14,9 +14,8 @@ class ImageKitService{
         this.imageKit = imageKit
     }
 
-    async upload(path, name, info){
+    async upload(file, name, info){
         try{
-            const file = fs.readFileSync(path)
             const res = await this.imageKit.upload({
                 file: file,
                 fileName: name
@@ -37,9 +36,8 @@ class ImageKitService{
         }
     }
 
-    async uploadFileOnly(path, name){
+    async uploadFileOnly(file, name){
         try{
-            const file = fs.readFileSync(path)
             const res = await this.imageKit.upload({
                 file: file,
                 fileName: name

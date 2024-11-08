@@ -3,6 +3,7 @@ const { usersProfilesService } = require('../helper/UsersProfilesServiceInstance
 const { getAllUsers, getUserById, newUser, updateUser, updateProfile, deleteUserProfile, uploadImage } = require('../UsersProfiles')
 const { imageKitService } = require('../helper/ImageKitServiceInstance')
 const fs = require('fs')
+const { randomize } = require('../helper/Randomize')
 
 jest.mock('../helper/UsersProfilesServiceInstance', () => ({
     usersProfilesService: {
@@ -15,6 +16,10 @@ jest.mock('../helper/UsersProfilesServiceInstance', () => ({
         deleteUserProfile: jest.fn(),
         updateImage: jest.fn()
     }
+}))
+
+jest.mock('../helper/Randomize', () => ({
+    randomize: jest.fn()
 }))
 
 jest.mock('../helper/ImageKitServiceInstance', () => ({
@@ -237,7 +242,10 @@ describe('Controller UsersProfiles.js', () => {
     describe('Upload profile image', () => {
         it('Should upload profile image', async() => {
             req.file = {
-                path: 'upload/gambar.png',
+                buffer: {
+                    toString: jest.fn()
+                },
+                originalname: 'Nakano Itsuki.png',
                 filename: 'Nakano Itsuki.png'
             }
 
@@ -256,15 +264,16 @@ describe('Controller UsersProfiles.js', () => {
             })
 
             imageKitService.uploadFileOnly.mockReturnValueOnce(uploaded)
+            req.file.buffer.toString.mockReturnValueOnce('aabbccdd')
+            randomize.mockReturnValueOnce('aabbccdd')
 
             await uploadImage(req, res, next)
 
-            expect(imageKitService.uploadFileOnly).toHaveBeenCalledWith(req.file.path, req.file.filename)
+            expect(imageKitService.uploadFileOnly).toHaveBeenCalledWith('aabbccdd', 'aabbccdd.png')
             expect(usersProfilesService.updateImage).toHaveBeenCalledWith(req.params.id, {
                 imageUrl: uploaded.url,
                 imageFileId: uploaded.fileId
             })
-            expect(fs.unlinkSync).toHaveBeenCalled()
             expect(res.json).toHaveBeenCalledWith({
                 status: 'OK'
             })

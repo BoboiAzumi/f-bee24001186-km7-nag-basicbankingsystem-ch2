@@ -1,5 +1,5 @@
-const fs = require('fs')
 const { imageKitService } = require('./helper/ImageKitServiceInstance')
+const { randomize } = require('./helper/Randomize')
 
 async function imageUpload(req, res, next){
     try{
@@ -7,21 +7,21 @@ async function imageUpload(req, res, next){
             throw new Error('No found file')
         }
         if(!req.file.mimetype.startsWith('image/')){
-            fs.unlinkSync(req.file.path)
             throw new Error('Invalid file')
         }
         if(!req.body.title || !req.body.description){
-            fs.unlinkSync(req.file.path)
             throw new Error('Title or description must be string')
         }
 
-        await imageKitService.upload(req.file.path, req.file.filename, {
+        const extension = req.file.originalname.split('.').pop()
+        const fileName = randomize();
+
+        await imageKitService.upload(req.file.buffer.toString('base64'), `${fileName}.${extension}`, {
             id: req.user.id,
             title: req.body.title,
             description: req.body.description
         })
 
-        fs.unlinkSync(req.file.path)
         res.json({
             status: 'OK'
         })
