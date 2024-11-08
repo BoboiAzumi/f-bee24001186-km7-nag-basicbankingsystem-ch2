@@ -438,6 +438,7 @@ describe('Test UsersProfileService', () => {
             })
 
             await expect(service.updateProfile(userId, data)).rejects.toThrow()
+            prisma.profile.update.mockReset()
         })
     })
 
@@ -468,6 +469,36 @@ describe('Test UsersProfileService', () => {
             })
 
             await expect(service.deleteUserProfile(userId)).rejects.toThrow('Data cannot be found')
+        })
+    })
+
+    describe('Update Image', () => {
+        it("Should update user's profile image", async () => {
+            const userId = 1
+            const data = {
+                imageUrl: 'https://abcd.com',
+                imageFileId: 'aabbccdd'
+            }
+
+            await service.updateImage(userId, data)
+            expect(prisma.profile.update).toHaveBeenCalledWith({
+                where: {userId},
+                data
+            })
+        })
+
+        it('Should error database', async () => {
+            const userId = 1
+            const data = {
+                imageUrl: 'https://abcd.com',
+                imageFileId: 'aabbccdd'
+            }
+
+            prisma.profile.update.mockImplementation(() => {
+                throw new Error()
+            })
+
+            await expect(service.updateImage(userId, data)).rejects.toThrow()
         })
     })
 })

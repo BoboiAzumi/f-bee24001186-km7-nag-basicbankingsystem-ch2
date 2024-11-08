@@ -7,8 +7,7 @@ const fs = require('fs');
 const { Authenticate } = require('./routes/Authenticate');
 const { Authorization } = require('./middleware/Authorization');
 const { newUser } = require('./handler/UsersProfiles');
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+const { ImageUpload } = require('./routes/ImageUpload');
 
 const app = express();
 
@@ -22,6 +21,7 @@ app.use('/api/v1/accounts', Authorization, AccountsRouter);
 app.use('/api/v1/transactions', Authorization, TransactionRouter);
 app.use('/api/v1/authenticate', Authenticate);
 app.use('/api/v1/register', newUser);
+app.use('/api/v1/uploads', Authorization, ImageUpload)
 
 app.use((err, req, res, next) => {
   if (err.name == 'Error') {
@@ -37,5 +37,13 @@ app.use((err, req, res, next) => {
     data: []
   });
 });
+
+app.all('*', (req, res) => {
+  res.status(404).json({
+    status: '404',
+    message: 'Not Found'
+  })
+})
+
 
 app.listen(3000, () => console.log('Start on 3000'));
