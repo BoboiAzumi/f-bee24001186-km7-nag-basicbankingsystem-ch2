@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <title>Notification</title>
+    </head>
+    <body>
+        <input type="text" id="input" placeholder="Ketik">
+        <button onClick="klik()">Klik</button>
+        <script src="/socket.io/socket.io.js" charset="utf-8"></script>
+        <script>
+            const socket = io();
+
+            socket.on('chat', (data) => {
+                alert(data.message)
+            })
+
+            function klik(){
+                const input = document.getElementById("input").value
+                socket.emit('chat', {message: input})
+            }
+        </script>
+    </body>
+</html>
