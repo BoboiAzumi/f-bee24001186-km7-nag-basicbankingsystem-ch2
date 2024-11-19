@@ -1,6 +1,7 @@
 const { imageKitService } = require('./helper/ImageKitServiceInstance')
 const { usersProfilesService } = require('./helper/UsersProfilesServiceInstance')
 const { randomize } = require('./helper/Randomize')
+const { eventEmitter } = require('../socketEvent')
 
 async function getAllUsers(req, res, next){
     try{
@@ -32,7 +33,10 @@ async function newUser(req, res, next){
     try{
         await usersProfilesService.create(req.body.data)
         res.status(201)
-        res.json({
+
+        eventEmitter.emit('calling', `Hello, Welcome ${req.body.data.name}`)
+        
+        return res.json({
             status: 'SUCCESS'
         })
     }

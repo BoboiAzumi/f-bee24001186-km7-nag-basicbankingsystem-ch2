@@ -1,3 +1,5 @@
+require('./instrument.js');
+const Sentry = require('@sentry/node');
 const express = require('express');
 const UsersProfilesRouter = require('./routes/UsersProfiles');
 const AccountsRouter = require('./routes/Accounts');
@@ -9,8 +11,9 @@ const { Authorization } = require('./middleware/Authorization');
 const { newUser } = require('./handler/UsersProfiles');
 const { ImageUpload } = require('./routes/ImageUpload');
 const dotenv = require('dotenv');
-const { testNodeMailer } = require('./services/ResetPassword');
 const { Forgot } = require('./routes/Forgot');
+const { Auth } = require('./handler/helper/Authentication');
+const { eventEmitter } = require('./socketEvent');
 
 dotenv.config()
 const PORT = process.env.PORT || 3000
@@ -21,27 +24,12 @@ const io = require('socket.io')(http)
 
 http.listen(PORT, '0.0.0.0',() => console.log(`Start on ${PORT}`));
 
-io.on('connect', (socket) => {
-  console.log('=============================================================')
-  console.log('Terkoneksi')
-
-  socket.on('chat', (data) => {
-    console.log('=============================================================')
-    console.log(`Client mengirimkan : ${data.message}`)
-    console.log(`Server akan mengirimkan : ${data.message + ' Diterima'}`)
-
-    data.message = data.message + ' Diterima'
-    io.sockets.emit('chat', data)
-
-    setTimeout(() => {
-      const message = 'Ayo Kirim Lagi'
-      console.log(`Server akan mengirimkan lagi : ${message}`)
-      io.sockets.emit('chat', {message: message})
-    }, 5000)
-  })
+eventEmitter.on('calling', (message) => {
+  io.sockets.emit('calling', message)
 })
 
 const swaggerJson = fs.readFileSync('./swagger.json');
+
 
 app.all('/', (req, res) => {
   res.redirect('/api-docs')
@@ -64,16 +52,22 @@ app.use('/api/v1/register', newUser);
 app.use('/api/v1/uploads', Authorization, ImageUpload)
 app.use('/api/v1/forgot-password', Forgot)
 
-app.get('/email/:email', (req, res) => {
+app.get('/reset-password', async (req, res, next) => {
   try{
-    const email = req.params.email
+    const valid = await Auth.validation(req.query.token)
 
-    return res.send(testNodeMailer(email))
+    if(!valid){
+      throw new Error('Invalid Token')
+    }
+
+    res.render('reset', {base_url: (process.env.BASE_URL || 'http://localhost:3000'), token: req.query.token})
   }
   catch(e){
     next(e)
   }
 })
+
+Sentry.setupExpressErrorHandler(app)
 
 app.use((err, req, res, next) => {
   if (err.name == 'Error') {
@@ -86,6 +80,7 @@ app.use((err, req, res, next) => {
     status: 'ERROR',
     name: err.name,
     message: err.message,
+    sentry: res.sentry,
     data: []
   });
 });

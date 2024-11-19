@@ -33,6 +33,25 @@ class Authentication{
 
         return token
     }
+
+    async createResetToken(email){
+        const find = await this.UsersProfiles.findFirst({
+            email
+        })
+
+        if(!find){
+            throw new Error('Email not found')
+        }
+
+        const token = jwt.sign({
+            id: find.id
+        }, this.secret, {
+            algorithm: 'HS256',
+            expiresIn: '24h'
+        })
+
+        return token
+    }
     
     async validation(token){
         if(!token){

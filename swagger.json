@@ -1103,6 +1103,84 @@
                     }
                 }
             }
+        },
+        "/api/v1/forgot-password": {
+            "post": {
+                "summary": "Forgot Password",
+                "tags": ["forgot-password"],
+                "description": "Send a link to reset the password to email. Note: email must be linked to the user and be a valid email.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {"type": "string", "example":"thed0704@gmail.com"}
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json":{
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {"type": "string", "example": "SUCCESS"}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/forgot-password/reset": {
+            "post": {
+                "summary": "Reset Password",
+                "tags": ["forgot-password"],
+                "description": "Send a link to reset the password to email. Note: email must be linked to the user and be a valid email.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "token": {"type": "string", "example":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAsImlhdCI6MTczMjAxNzgzMSwiZXhwIjoxNzMyMTA0MjMxfQ.rsWi4d4QT_APMg9wnf8b5hEoklZjaM3s70K_roQikvE"},
+                                    "password": {"type": "string", "example": "bolasepak123"},
+                                    "confirmPassword": {"type": "string", "example": "bolasepak123"}
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json":{
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {"type": "string", "example": "SUCCESS"}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/notification": {
+            "get": {
+                "summary": "Notification",
+                "tags": ["notification"],
+                "description": "Web Socket / Socket.io notification",
+                "responses": {
+                    "200": {}
+                }
+            }
         }
     },
     "components": {
@@ -1118,6 +1196,18 @@
 		{"bearerAuth": []}
 	],
     "tags": [
+        {
+            "name": "register",
+            "description": "Register new user"
+        },
+        {
+            "name": "forgot-password",
+            "description": "Forgot Password"
+        },
+        {
+            "name": "notification",
+            "description": "Web Socket / Socket.io"
+        },
         {
             "name": "users",
             "description": "The Users managing API"
