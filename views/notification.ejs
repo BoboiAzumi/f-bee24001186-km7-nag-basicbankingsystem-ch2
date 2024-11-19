@@ -1,22 +1,109 @@
-<html>
-    <head>
-        <title>Notification</title>
-    </head>
-    <body>
-        <input type="text" id="input" placeholder="Ketik">
-        <button onClick="klik()">Klik</button>
-        <script src="/socket.io/socket.io.js" charset="utf-8"></script>
-        <script>
-            const socket = io();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+        .chat-container {
+            width: 100%;
+            max-width: 400px;
+            height: 500px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-messages {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+        }
+        .chat-messages .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            background: #e6e6e6;
+        }
+        .chat-input {
+            display: flex;
+            padding: 8px;
+            border-top: 1px solid #ccc;
+            background: #f9f9f9;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+        .chat-input button {
+            padding: 10px 16px;
+            font-size: 14px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .chat-input button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div id="chatMessages" class="chat-messages"></div>
+    </div>
 
-            socket.on('chat', (data) => {
-                alert(data.message)
-            })
+    <script src="/socket.io/socket.io.js" charset="utf-8"></script>
+    <script>
+        const messages = []; // Chat array
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendButton = document.getElementById('sendButton');
+        let socket
 
-            function klik(){
-                const input = document.getElementById("input").value
-                socket.emit('chat', {message: input})
+        // Function to render messages
+        const renderMessages = () => {
+            chatMessages.innerHTML = ''; // Clear previous messages
+            messages.forEach((msg) => {
+                const div = document.createElement('div');
+                div.className = 'message';
+                div.textContent = msg;
+                chatMessages.appendChild(div);
+            });
+
+            // Auto-scroll to the bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        };
+
+        // Add message to the array and re-render
+        window.onload = function(e) {
+            if(socket){
+                socket.disconnect();
             }
-        </script>
-    </body>
+            
+            socket = io();
+
+            socket.on('calling', (data) => {
+            messages.push(data);
+            renderMessages();
+        })
+        };
+    </script>
+</body>
 </html>
